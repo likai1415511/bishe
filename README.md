@@ -1,5 +1,10 @@
 ### 毕设论文
 
+### 预安装
+
+- 安装Texlive(for Ubuntu) sudo apt-get install texlive-full
+- [安装Adobe fonts](http://m.blog.csdn.net/article/details?id=41981815)
+
 #### 编译命令
 
 - 安装 ./makethesis install
