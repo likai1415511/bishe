@@ -8,10 +8,80 @@
 %% 
 %% This file is a part of the example of BUPTGraduateThesis.
 %% 
+%%文章 ARTICLE（多少期多少卷）[J]
+%%书  BOOK [M]
+%%学报 INPROCEEDINGS [C]
+%%学位论文 DISSERTATION [D]
+%%专利 PATENT [P]
+%%标准 STANDARD [S]
+%%链接 ELECTRONIC 
+%%报纸 NEWSPAPER [N]
+%%TECHREPORT [P]
+%%1、期刊〔J〕 2、专著〔M〕 3、论文集〔C〕 4、学位论文〔D〕 5、专利〔P〕 6、标准〔S〕 7、报纸〔N〕 8、技术报告〔R〕
+%%1、联机网上数据库〔DB/OL〕 2、磁带数据库〔DB/MT〕 3、光盘图书〔M/CD〕 4、磁盘软件〔CP/DK〕 5、网上期刊〔J/OL〕 6、网上电子公告〔EB/OL〕
 
 @BUPTGraduateThesisBSTCTL{BSTcontrol,
   CTLmaxnum_authors = "3"
   CTLswitch_chs_punc = "no",
+}
+
+%Myself
+@INPROCEEDINGS{SDN-1,
+  author = "P Porras and S Shin and V Yegneswaran",
+  title = "A security enforcement kernel for Open Flow networks",
+  booktitle = "The 1st Workshop on Hot Topics in Software Defined Networks",
+  address = "New York",
+  publisher = "ACM Press",
+  year = "2012",
+  pages = "121-126",
+  note = ""
+}
+
+%Myself
+@ARTICLE{Virtual-1,
+  author = "A Wang and M Iyer and R Dutta and G.N Rouskas and I Baldine",
+  title = "Network Virtualization: Technologies, Perspectives, and Frontiers",
+  booktitle = "Journal of Lightwave Technology",
+  year = "2013",
+  volume = "31",
+  number = "4",
+  pages = "523-537",
+  multiseriesmsg = "year, volume, number and pages information for paper published in multi-series journals",
+  note = ""
+}
+
+%Myself
+@INPROCEEDINGS{Openstack-1,
+  author = "Hua-YingChang. and Shie-YuanWang.",
+  title = "Using SDN technology to mitigate congestion in the OpenStack data center network",
+  booktitle = "(ICC)",
+  address = "",
+  publisher = "IEEE",
+  year = "2015",
+  pages = "401-406",
+  note = ""
+}
+
+%Myself
+@INPROCEEDINGS{Openstack-2,
+  author = "E Feller and L Rilling and C Morin and Snooze",
+  title = "A scalable and autonomic virtual machine management framework for private clouds",
+  booktitle = "Proceedings of the 2012 12th IEEE/ACM International Symposium on Cluster",
+  address = "",
+  publisher = "IEEE Computer Society",
+  year = "2012",
+  pages = "482-489",
+  note = ""
+}
+
+@PROCEEDINGS{CITATION_PROCEEDINGS,
+  editor = "",
+  booktitle = "Proceedings of IEEE Global Communications Conference (GLOBECOM'2008)",
+  address = "New Orlean, USA",
+  publisher = "IEEE",
+  year = "2008",
+  pages = "",
+  note = ""
 }
 
 @BOOK{CITATION_BOOK,
@@ -27,6 +97,7 @@
   note = ""
 }
 
+%文章
 @ARTICLE{CITATION_ARTICLE,
   author = "Erik Dahlman and Bj{\"o}rn Gudmundson and Mats Nilsson and Johan Sk{\"o}ld",
   title = "UMTS/IMT-2000 Based on Wideband CDMA",
@@ -49,6 +120,7 @@
   note = ""
 }
 
+%学报期刊
 @INPROCEEDINGS{CITATION_INPROCEEDINGS,
   author = "Jindal, Nihar and Andrews, Jeffrey G. and Weber, Steven",
   title = "Rethinking MIMO for Wireless Networks: Linear Throughput Increases with Multiple Receive Antennas",
@@ -60,6 +132,7 @@
   note = ""
 }
 
+%学位论文
 @DISSERTATION{CITATION_DISSERTATION,
   author = "Mitola, Joseph",
   title = "Cognitive Radio: An Integrated Agent Architecture for Software Defined Radio",
@@ -80,6 +153,7 @@
   note = ""
 }
 
+%专利
 @PATENT{CITATION_PATENT,
   author = "Paulraj, Arogyaswami J. and Heath, Jr, Robert W. and Sebastian, Peroor K. and Gesbert, David J.",
   title = "Spatial Multiplexing in a Cellular Network",
@@ -99,6 +173,7 @@
   note = ""
 }
 
+%报纸
 @NEWSPAPER{CITATION_NEWSPAPER,
   author = "吴刚",
   title = "立陶宛进入欧元时代",
@@ -108,6 +183,7 @@
   note = ""
 }
 
+%链接
 @ELECTRONIC{CITATION_ELECTRONIC,
   author = "{百度百科}",
   title = "香农公式",
