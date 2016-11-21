@@ -22,3 +22,7 @@
 - pubs.tex 发表论文列表
 - bare\_thesis.bib 参考文献列表
 - 论文的正文以ch\_开头,论文的附录以app\_开头
+
+#### 需要重画/修改的图
+- sdn.png该图在新一代网络架构.doc中有viso格式，需要转为pdf
+- of-switch.png该图在新一代网络架构.doc中有viso格式，需要转为pdf
