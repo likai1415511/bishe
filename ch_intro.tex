@@ -17,7 +17,7 @@
 
 网络虚拟化\cite{Virtual-1}是一种将底层网络中的硬件以及配套的软件资源进行整合，形成统一管理实体的技术，通过虚拟网络资源到物理网络资源的映射，使得多个逻辑虚拟网络共享底层物理网络基础设施,为用户提供差异化服务。网络虚拟化技术是当今网络革新的重要技术之一。从概念上，网络虚拟化与SDN是互相独立的，但随着近几年网络技术的发展与融合，二者之间的联系变得越来越紧密，SDN的技术相关专题常会提及网络虚拟化技术，网络虚拟化问题的研究也时常会运用到SDN的概念，可见基于SDN的网络虚拟化技术已经成为网络技术研究领域的一个专门课题。
 
-OpenStack\cite{Openstack-1}是由Rackspace和美国国家航空航天局（NASA）合作研发的用于搭建Iaas平台的云计算管理软件。旨在为公共及私有云的建设与管理提供软件的开源项目，主要提供计算、存储、网络服务。OpenStack支持几乎所有类型的云环境，项目目标是提供实施简单、可大规模扩展、丰富、标准统一的云计算管理平台。OpenStack通过各种互补的服务提供了\gls*{IaaS}的解决方案，每个服务提供API以进行集成\cite{Openstack-2}。
+OpenStack\cite{OpenStack-1}是由Rackspace和美国国家航空航天局（NASA）合作研发的用于搭建Iaas平台的云计算管理软件。旨在为公共及私有云的建设与管理提供软件的开源项目，主要提供计算、存储、网络服务。OpenStack支持几乎所有类型的云环境，项目目标是提供实施简单、可大规模扩展、丰富、标准统一的云计算管理平台。OpenStack通过各种互补的服务提供了\gls*{IaaS}的解决方案，每个服务提供API以进行集成\cite{OpenStack-2}。
 
 在现有OpenStack云平台中，租户网络的创建与隔离仅限于服务器内部，OpenStack无法进行物理服务器之间数据中心网络的管控，跨服务器的通信通过隧道技术实现，该模式无法满足用户多样性的需求，同时无法实现云数据中心带宽资源的有效利用,时常会出现有些链路阻塞严重，而有些链路则处于空闲状态。
 
@@ -55,7 +55,7 @@ OpenStack\cite{Openstack-1}是由Rackspace和美国国家航空航天局（NASA�
 
 第一章主要概述了研究背景、意义以及研究的主要内容，包括SDN、OpenStack的背景介绍，本文的主要研究内容以及基于SDN云平台多租户虚拟网络定制化的意义、创新点。
 
-第二章
+第二章主要介绍了SDN、网络虚拟化及OpenStack的相关技术。首先介绍了OpenFlow 协议,OpenFlow 交换机的组成以及 OpenFlow 流表的字段和匹配过程。对于网络虚拟化技术,由于本文需要实现 SDN 模式下的网络虚拟化,所以仅对适用于本文的 SDN 模式下的网络虚拟化技术做了简单的概括。随后阐述了 OpenStack 的模块构成,而对于本文用到的 Neutron 模块,进行了详细的架构剖析。最后对本章内容做了总结。
 
 第三章
 
@@ -65,39 +65,6 @@ OpenStack\cite{Openstack-1}是由Rackspace和美国国家航空航天局（NASA�
 
 \section{本章小结}
 本章对课题的研究背景进行了描述，阐述了SDN、OpenStack、网络虚拟化等相关技术，并在此基础上确定了研究内容，对研究生期间的主要工作做了简单的概括，最后对论文的组织结构进行了介绍。
-
-\begin{enumerate}
-\item 第二章介绍……
-\item ……
-\end{enumerate}
-\begin{itemize}
-\item 第二章介绍……
-\item ……
-\end{itemize}
-
-\definecolor{bg}{rgb}{0.95,0.95,0.95}
-\begin{center}
-%xleftmargin=0.4\textwidth
-\begin{minted}[linenos=false,fontsize=\scriptsize,
-				frame=single,framesep=10pt]{python} 
-def create():
-    pass
-class Test():
-    def __init__():
-        pass
-\end{minted}  
-\end{center}
-
-图\ref{fig:env1}
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.6\textwidth]{logo/architecture}
-  \caption{System environment.}
-  \label{fig:env1}
-\end{figure}
-
-脚注使用带圈数字的表示方法，此处为示例 1\footnote{测试脚注一} 和示例 2\footnote{测试脚注二}。
-参考文献可以使用\cite{BUPT_Thesis_Format_2014}和\onlinecite{BUPT_Thesis_Format_2004}的表示方法。
 
 %% 本章参考文献
 \ifx\usechapbib\empty
