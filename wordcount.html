@@ -150,6 +150,10 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <span class='comment'>%% 用\include{}命令引用各章.tex文件</span><span class='cumsum'> [0]</span><br>
 <span class='cmd'>\include</span><span class='ignore'>{</span><span class='fileinc'>ch_intro</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
 <span class='cmd'>\include</span><span class='ignore'>{</span><span class='fileinc'>ch_concln</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\include</span><span class='ignore'>{</span><span class='fileinc'>ch_architecture</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\include</span><span class='ignore'>{</span><span class='fileinc'>ch_module</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\include</span><span class='ignore'>{</span><span class='fileinc'>ch_implement</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\include</span><span class='ignore'>{</span><span class='fileinc'>ch_conclusion</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
 <span class='cumsum'> [0]</span><br>
 <span class='comment'>%% 附录部分</span><span class='cumsum'> [0]</span><br>
 <span class='cumsum'> [0]</span><br>
@@ -170,7 +174,9 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <span class='cumsum'> [0]</span><br>
 <span class='cmd'>\ifx</span><span class='cmd'>\usechapbib</span><span class='cmd'>\undefined</span><span class='cumsum'> [0]</span><br>
 <span class='cmd'>\bibliographystyle</span><span class='ignore'>{</span><span class='ignore'>buptgraduatethesis</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
-<span class='cmd'>\bibliography</span><span class='ignore'>{</span><span class='word'>bare</span><span class='ignore'>_</span><span class='word'>thesis</span><span class='ignore'>}</span><span class='cumsum'> [2]</span><br>
+<span class='cmd'>\bibliography</span><br>
+<span class='error'>File bare_thesis.bbl not found in path [./].</span><br>
+<span class='ignore'>{</span><span class='word'>bare</span><span class='ignore'>_</span><span class='word'>thesis</span><span class='ignore'>}</span><span class='cumsum'> [2]</span><br>
 <span class='cmd'>\fi</span><span class='cumsum'> [2]</span><br>
 <span class='cumsum'> [2]</span><br>
 <span class='cmd'>\backmatter</span><span class='cumsum'> [2]</span><br>
@@ -340,70 +346,37 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <span class='cumsum'> [22]</span><br>
 <span class='word'>第</span><span class='word'>一</span><span class='word'>章</span><span class='word'>主</span><span class='word'>要</span><span class='word'>概</span><span class='word'>述</span><span class='word'>了</span><span class='word'>研</span><span class='word'>究</span><span class='word'>背</span><span class='word'>景</span><span class='ignore'>、</span><span class='word'>意</span><span class='word'>义</span><span class='word'>以</span><span class='word'>及</span><span class='word'>研</span><span class='word'>究</span><span class='word'>的</span><span class='word'>主</span><span class='word'>要</span><span class='word'>内</span><span class='word'>容</span><span class='ignore'>，</span><span class='word'>包</span><span class='word'>括</span><span class='word'>SDN</span><span class='ignore'>、</span><span class='word'>OpenStack</span><span class='word'>的</span><span class='word'>背</span><span class='word'>景</span><span class='word'>介</span><span class='word'>绍</span><span class='ignore'>，</span><span class='word'>本</span><span class='word'>文</span><span class='word'>的</span><span class='word'>主</span><span class='word'>要</span><span class='word'>研</span><span class='word'>究</span><span class='word'>内</span><span class='word'>容</span><span class='word'>以</span><span class='word'>及</span><span class='word'>基</span><span class='word'>于</span><span class='word'>SDN</span><span class='word'>云</span><span class='word'>平</span><span class='word'>台</span><span class='word'>多</span><span class='word'>租</span><span class='word'>户</span><span class='word'>虚</span><span class='word'>拟</span><span class='word'>网</span><span class='word'>络</span><span class='word'>定</span><span class='word'>制</span><span class='word'>化</span><span class='word'>的</span><span class='word'>意</span><span class='word'>义</span><span class='ignore'>、</span><span class='word'>创</span><span class='word'>新</span><span class='word'>点</span><span class='ignore'>。</span><span class='cumsum'> [87]</span><br>
 <span class='cumsum'> [87]</span><br>
-<span class='word'>第</span><span class='word'>二</span><span class='word'>章</span><span class='cumsum'> [90]</span><br>
-<span class='cumsum'> [90]</span><br>
-<span class='word'>第</span><span class='word'>三</span><span class='word'>章</span><span class='cumsum'> [93]</span><br>
-<span class='cumsum'> [93]</span><br>
-<span class='word'>第</span><span class='word'>四</span><span class='word'>章</span><span class='cumsum'> [96]</span><br>
-<span class='cumsum'> [96]</span><br>
-<span class='word'>第</span><span class='word'>五</span><span class='word'>章</span><span class='cumsum'> [99]</span><br>
-<span class='cumsum'> [99]</span><br>
+<span class='word'>第</span><span class='word'>二</span><span class='word'>章</span><span class='word'>主</span><span class='word'>要</span><span class='word'>介</span><span class='word'>绍</span><span class='word'>了</span><span class='word'>SDN</span><span class='ignore'>、</span><span class='word'>网</span><span class='word'>络</span><span class='word'>虚</span><span class='word'>拟</span><span class='word'>化</span><span class='word'>及</span><span class='word'>OpenStack</span><span class='word'>的</span><span class='word'>相</span><span class='word'>关</span><span class='word'>技</span><span class='word'>术</span><span class='ignore'>。</span><span class='word'>首</span><span class='word'>先</span><span class='word'>介</span><span class='word'>绍</span><span class='word'>了</span><span class='word'>OpenFlow</span> <span class='word'>协</span><span class='word'>议</span><span class='ignore'>,</span><span class='word'>OpenFlow</span> <span class='word'>交</span><span class='word'>换</span><span class='word'>机</span><span class='word'>的</span><span class='word'>组</span><span class='word'>成</span><span class='word'>以</span><span class='word'>及</span> <span class='word'>OpenFlow</span> <span class='word'>流</span><span class='word'>表</span><span class='word'>的</span><span class='word'>字</span><span class='word'>段</span><span class='word'>和</span><span class='word'>匹</span><span class='word'>配</span><span class='word'>过</span><span class='word'>程</span><span class='ignore'>。</span><span class='word'>对</span><span class='word'>于</span><span class='word'>网</span><span class='word'>络</span><span class='word'>虚</span><span class='word'>拟</span><span class='word'>化</span><span class='word'>技</span><span class='word'>术</span><span class='ignore'>,</span><span class='word'>由</span><span class='word'>于</span><span class='word'>本</span><span class='word'>文</span><span class='word'>需</span><span class='word'>要</span><span class='word'>实</span><span class='word'>现</span> <span class='word'>SDN</span> <span class='word'>模</span><span class='word'>式</span><span class='word'>下</span><span class='word'>的</span><span class='word'>网</span><span class='word'>络</span><span class='word'>虚</span><span class='word'>拟</span><span class='word'>化</span><span class='ignore'>,</span><span class='word'>所</span><span class='word'>以</span><span class='word'>仅</span><span class='word'>对</span><span class='word'>适</span><span class='word'>用</span><span class='word'>于</span><span class='word'>本</span><span class='word'>文</span><span class='word'>的</span> <span class='word'>SDN</span> <span class='word'>模</span><span class='word'>式</span><span class='word'>下</span><span class='word'>的</span><span class='word'>网</span><span class='word'>络</span><span class='word'>虚</span><span class='word'>拟</span><span class='word'>化</span><span class='word'>技</span><span class='word'>术</span><span class='word'>做</span><span class='word'>了</span><span class='word'>简</span><span class='word'>单</span><span class='word'>的</span><span class='word'>概</span><span class='word'>括</span><span class='ignore'>。</span><span class='word'>随</span><span class='word'>后</span><span class='word'>阐</span><span class='word'>述</span><span class='word'>了</span> <span class='word'>OpenStack</span> <span class='word'>的</span><span class='word'>模</span><span class='word'>块</span><span class='word'>构</span><span class='word'>成</span><span class='ignore'>,</span><span class='word'>而</span><span class='word'>对</span><span class='word'>于</span><span class='word'>本</span><span class='word'>文</span><span class='word'>用</span><span class='word'>到</span><span class='word'>的</span> <span class='word'>Neutron</span> <span class='word'>模</span><span class='word'>块</span><span class='ignore'>,</span><span class='word'>进</span><span class='word'>行</span><span class='word'>了</span><span class='word'>详</span><span class='word'>细</span><span class='word'>的</span><span class='word'>架</span><span class='word'>构</span><span class='word'>剖</span><span class='word'>析</span><span class='ignore'>。</span><span class='word'>最</span><span class='word'>后</span><span class='word'>对</span><span class='word'>本</span><span class='word'>章</span><span class='word'>内</span><span class='word'>容</span><span class='word'>做</span><span class='word'>了</span><span class='word'>总</span><span class='word'>结</span><span class='ignore'>。</span><span class='cumsum'> [235]</span><br>
+<span class='cumsum'> [235]</span><br>
+<span class='word'>第</span><span class='word'>三</span><span class='word'>章</span><span class='cumsum'> [238]</span><br>
+<span class='cumsum'> [238]</span><br>
+<span class='word'>第</span><span class='word'>四</span><span class='word'>章</span><span class='cumsum'> [241]</span><br>
+<span class='cumsum'> [241]</span><br>
+<span class='word'>第</span><span class='word'>五</span><span class='word'>章</span><span class='cumsum'> [244]</span><br>
+<span class='cumsum'> [244]</span><br>
 <span class='cmd'>\section</span><span class='ignore'>{</span><span class='hword'>本</span><span class='hword'>章</span><span class='hword'>小</span><span class='hword'>结</span><span class='ignore'>}</span><span class='cumsum'> [4]</span><br>
 <span class='word'>本</span><span class='word'>章</span><span class='word'>对</span><span class='word'>课</span><span class='word'>题</span><span class='word'>的</span><span class='word'>研</span><span class='word'>究</span><span class='word'>背</span><span class='word'>景</span><span class='word'>进</span><span class='word'>行</span><span class='word'>了</span><span class='word'>描</span><span class='word'>述</span><span class='ignore'>，</span><span class='word'>阐</span><span class='word'>述</span><span class='word'>了</span><span class='word'>SDN</span><span class='ignore'>、</span><span class='word'>OpenStack</span><span class='ignore'>、</span><span class='word'>网</span><span class='word'>络</span><span class='word'>虚</span><span class='word'>拟</span><span class='word'>化</span><span class='word'>等</span><span class='word'>相</span><span class='word'>关</span><span class='word'>技</span><span class='word'>术</span><span class='ignore'>，</span><span class='word'>并</span><span class='word'>在</span><span class='word'>此</span><span class='word'>基</span><span class='word'>础</span><span class='word'>上</span><span class='word'>确</span><span class='word'>定</span><span class='word'>了</span><span class='word'>研</span><span class='word'>究</span><span class='word'>内</span><span class='word'>容</span><span class='ignore'>，</span><span class='word'>对</span><span class='word'>研</span><span class='word'>究</span><span class='word'>生</span><span class='word'>期</span><span class='word'>间</span><span class='word'>的</span><span class='word'>主</span><span class='word'>要</span><span class='word'>工</span><span class='word'>作</span><span class='word'>做</span><span class='word'>了</span><span class='word'>简</span><span class='word'>单</span><span class='word'>的</span><span class='word'>概</span><span class='word'>括</span><span class='ignore'>，</span><span class='word'>最</span><span class='word'>后</span><span class='word'>对</span><span class='word'>论</span><span class='word'>文</span><span class='word'>的</span><span class='word'>组</span><span class='word'>织</span><span class='word'>结</span><span class='word'>构</span><span class='word'>进</span><span class='word'>行</span><span class='word'>了</span><span class='word'>介</span><span class='word'>绍</span><span class='ignore'>。</span><span class='cumsum'> [80]</span><br>
 <span class='cumsum'> [80]</span><br>
-<span class='envir'>\begin</span><span class='envir'>{enumerate}</span><span class='cumsum'> [80]</span><br>
-<span class='cmd'>\item</span> <span class='word'>第</span><span class='word'>二</span><span class='word'>章</span><span class='word'>介</span><span class='word'>绍</span><span class='ignore'>…</span><span class='ignore'>…</span><span class='cumsum'> [85]</span><br>
-<span class='cmd'>\item</span> <span class='ignore'>…</span><span class='ignore'>…</span><span class='cumsum'> [85]</span><br>
-<span class='envir'>\end</span><span class='envir'>{enumerate}</span><span class='cumsum'> [85]</span><br>
-<span class='envir'>\begin</span><span class='envir'>{itemize}</span><span class='cumsum'> [85]</span><br>
-<span class='cmd'>\item</span> <span class='word'>第</span><span class='word'>二</span><span class='word'>章</span><span class='word'>介</span><span class='word'>绍</span><span class='ignore'>…</span><span class='ignore'>…</span><span class='cumsum'> [90]</span><br>
-<span class='cmd'>\item</span> <span class='ignore'>…</span><span class='ignore'>…</span><span class='cumsum'> [90]</span><br>
-<span class='envir'>\end</span><span class='envir'>{itemize}</span><span class='cumsum'> [90]</span><br>
-<span class='cumsum'> [90]</span><br>
-<span class='cmd'>\definecolor</span><span class='ignore'>{</span><span class='word'>bg</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='word'>rgb</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='word'>0.95</span><span class='ignore'>,</span><span class='word'>0.95</span><span class='ignore'>,</span><span class='word'>0.95</span><span class='ignore'>}</span><span class='cumsum'> [95]</span><br>
-<span class='envir'>\begin</span><span class='envir'>{center}</span><span class='cumsum'> [95]</span><br>
-<span class='comment'>%xleftmargin=0.4\textwidth</span><span class='cumsum'> [95]</span><br>
-<span class='envir'>\begin</span><span class='envir'>{minted}</span><span class='ignore'>[</span><span class='word'>linenos</span><span class='ignore'>=</span><span class='word'>false</span><span class='ignore'>,</span><span class='word'>fontsize</span><span class='ignore'>=</span><span class='cmd'>\scriptsize</span><span class='ignore'>,</span><span class='cumsum'> [98]</span><br>
-&nbsp; &nbsp; <span class='word'>frame</span><span class='ignore'>=</span><span class='word'>single</span><span class='ignore'>,</span><span class='word'>framesep</span><span class='ignore'>=</span><span class='word'>10pt</span><span class='ignore'>]</span><span class='ignore'>{</span><span class='word'>python</span><span class='ignore'>}</span> <span class='cumsum'> [103]</span><br>
-<span class='word'>def</span> <span class='word'>create</span><span class='ignore'>(</span><span class='ignore'>)</span><span class='ignore'>:</span><span class='cumsum'> [105]</span><br>
-&nbsp; &nbsp; <span class='word'>pass</span><span class='cumsum'> [106]</span><br>
-<span class='word'>class</span> <span class='word'>Test</span><span class='ignore'>(</span><span class='ignore'>)</span><span class='ignore'>:</span><span class='cumsum'> [108]</span><br>
-&nbsp; &nbsp; <span class='word'>def</span> <span class='ignore'>_</span><span class='ignore'>_</span><span class='word'>init</span><span class='ignore'>_</span><span class='ignore'>_</span><span class='ignore'>(</span><span class='ignore'>)</span><span class='ignore'>:</span><span class='cumsum'> [110]</span><br>
-&nbsp; &nbsp; &nbsp; &nbsp; <span class='word'>pass</span><span class='cumsum'> [111]</span><br>
-<span class='envir'>\end</span><span class='envir'>{minted}</span><span class='cumsum'> [111]</span><br>
-<span class='envir'>\end</span><span class='envir'>{center}</span><span class='cumsum'> [111]</span><br>
-<span class='cumsum'> [111]</span><br>
-<span class='word'>图</span><span class='cmd'>\ref</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>env1</span><span class='ignore'>}</span><span class='cumsum'> [112]</span><br>
-<span class='envir'>\begin</span><span class='envir'>{figure}</span><span class='option'>[!htb]</span><span class='cumsum'> [112]</span><br>
-&nbsp;<span class='exclcmd'>\centering</span><span class='cumsum'> [112]</span><br>
-&nbsp;<span class='exclcmd'>\includegraphics</span><span class='option'>[width=0.6\textwidth]</span><span class='ignore'>{</span><span class='ignore'>logo</span><span class='ignore'>/</span><span class='ignore'>architecture</span><span class='ignore'>}</span><span class='cumsum'> [112]</span><br>
-&nbsp; <span class='cmd'>\caption</span><span class='ignore'>{</span><span class='oword'>System</span> <span class='oword'>environment</span><span class='ignore'>.</span><span class='ignore'>}</span><span class='cumsum'> [114]</span><br>
-&nbsp;<span class='exclcmd'>\label</span><span class='ignore'>{</span><span class='ignore'>fig</span><span class='ignore'>:</span><span class='ignore'>env1</span><span class='ignore'>}</span><span class='cumsum'> [114]</span><br>
-<span class='envir'>\end</span><span class='envir'>{figure}</span><span class='cumsum'> [114]</span><br>
-<span class='cumsum'> [114]</span><br>
-<span class='word'>脚</span><span class='word'>注</span><span class='word'>使</span><span class='word'>用</span><span class='word'>带</span><span class='word'>圈</span><span class='word'>数</span><span class='word'>字</span><span class='word'>的</span><span class='word'>表</span><span class='word'>示</span><span class='word'>方</span><span class='word'>法</span><span class='ignore'>，</span><span class='word'>此</span><span class='word'>处</span><span class='word'>为</span><span class='word'>示</span><span class='word'>例</span> <span class='word'>1</span><span class='cmd'>\footnote</span><span class='ignore'>{</span><span class='oword'>测</span><span class='oword'>试</span><span class='oword'>脚</span><span class='oword'>注</span><span class='oword'>一</span><span class='ignore'>}</span> <span class='word'>和</span><span class='word'>示</span><span class='word'>例</span> <span class='word'>2</span><span class='cmd'>\footnote</span><span class='ignore'>{</span><span class='oword'>测</span><span class='oword'>试</span><span class='oword'>脚</span><span class='oword'>注</span><span class='oword'>二</span><span class='ignore'>}</span><span class='ignore'>。</span><span class='cumsum'> [147]</span><br>
-<span class='word'>参</span><span class='word'>考</span><span class='word'>文</span><span class='word'>献</span><span class='word'>可</span><span class='word'>以</span><span class='word'>使</span><span class='word'>用</span><span class='cmd'>\cite</span><span class='ignore'>{</span><span class='ignore'>BUPT</span><span class='ignore'>_</span><span class='ignore'>Thesis</span><span class='ignore'>_</span><span class='ignore'>Format</span><span class='ignore'>_</span><span class='ignore'>2014</span><span class='ignore'>}</span><span class='word'>和</span><span class='word'>\onlinecite</span><span class='ignore'>{</span><span class='word'>BUPT</span><span class='ignore'>_</span><span class='word'>Thesis</span><span class='ignore'>_</span><span class='word'>Format</span><span class='ignore'>_</span><span class='word'>2004</span><span class='ignore'>}</span><span class='word'>的</span><span class='word'>表</span><span class='word'>示</span><span class='word'>方</span><span class='word'>法</span><span class='ignore'>。</span><span class='cumsum'> [166]</span><br>
-<span class='cumsum'> [166]</span><br>
-<span class='comment'>%% 本章参考文献</span><span class='cumsum'> [166]</span><br>
-<span class='cmd'>\ifx</span><span class='cmd'>\usechapbib</span><span class='cmd'>\empty</span><span class='cumsum'> [166]</span><br>
-<span class='cmd'>\nocite</span><span class='ignore'>{</span><span class='ignore'>BSTcontrol</span><span class='ignore'>}</span><span class='cumsum'> [166]</span><br>
-<span class='cmd'>\setcounter</span><span class='ignore'>{</span><span class='ignore'>NAT</span><span class='ignore'>@</span><span class='ignore'>ctr</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>0</span><span class='ignore'>}</span><span class='cumsum'> [166]</span><br>
-<span class='cmd'>\bibliographystyle</span><span class='ignore'>{</span><span class='ignore'>buptgraduatethesis</span><span class='ignore'>}</span><span class='cumsum'> [166]</span><br>
+<span class='comment'>%% 本章参考文献</span><span class='cumsum'> [80]</span><br>
+<span class='cmd'>\ifx</span><span class='cmd'>\usechapbib</span><span class='cmd'>\empty</span><span class='cumsum'> [80]</span><br>
+<span class='cmd'>\nocite</span><span class='ignore'>{</span><span class='ignore'>BSTcontrol</span><span class='ignore'>}</span><span class='cumsum'> [80]</span><br>
+<span class='cmd'>\setcounter</span><span class='ignore'>{</span><span class='ignore'>NAT</span><span class='ignore'>@</span><span class='ignore'>ctr</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>0</span><span class='ignore'>}</span><span class='cumsum'> [80]</span><br>
+<span class='cmd'>\bibliographystyle</span><span class='ignore'>{</span><span class='ignore'>buptgraduatethesis</span><span class='ignore'>}</span><span class='cumsum'> [80]</span><br>
 <span class='cmd'>\bibliography</span><br>
 <span class='error'>File ch_intro.bbl not found in path [./].</span><br>
-<span class='ignore'>{</span><span class='word'>bare</span><span class='ignore'>_</span><span class='word'>thesis</span><span class='ignore'>}</span><span class='cumsum'> [168]</span><br>
-<span class='cmd'>\fi</span><span class='cumsum'> [168]</span><br>
+<span class='ignore'>{</span><span class='word'>bare</span><span class='ignore'>_</span><span class='word'>thesis</span><span class='ignore'>}</span><span class='cumsum'> [82]</span><br>
+<span class='cmd'>\fi</span><span class='cumsum'> [82]</span><br>
 </p></div>
 <div class='count'>
 <ul class='count'>
 <li class='header'>Included file: ./ch_intro.tex</li>
 <li>Encoding: utf8</li>
-<li>Sum count: 3176</li>
-<li>Words in text: 3119</li>
+<li>Sum count: 3235</li>
+<li>Words in text: 3190</li>
 <li>Words in headers: 45</li>
-<li>Words outside text (captions, etc.): 12</li>
+<li>Words outside text (captions, etc.): 0</li>
 <li>Number of headers: 8</li>
-<li>Number of floats/tables/figures: 1</li>
+<li>Number of floats/tables/figures: 0</li>
 <li>Number of math inlines: 0</li>
 <li>Number of math displayed: 0</li>
 <li>Subcounts:</li>
@@ -415,8 +388,8 @@ table.stat .sum {font-weight:bold; font-style:italic;}
   <li>700+4+0 (1/0/0/0) Subsection: 研究内容</li>
   <li>571+3+0 (1/0/0/0) Subsection: 创新点</li>
   <li>478+9+0 (1/0/0/0) Section: 研究生期间主要工作</li>
-  <li>93+6+0 (1/0/0/0) Section: 论文组织结构</li>
-  <li>152+4+12 (1/1/0/0) Section: 本章小结</li>
+  <li>238+6+0 (1/0/0/0) Section: 论文组织结构</li>
+  <li>78+4+0 (1/0/0/0) Section: 本章小结</li>
 </span>
 </ul>
 </div>
@@ -433,7 +406,7 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <span class='comment'>%% This file is a part of the example of BUPTGraduateThesis.</span><span class='cumsum'> [0]</span><br>
 <span class='comment'>%% </span><span class='cumsum'> [0]</span><br>
 <span class='cumsum'> [0]</span><br>
-<span class='cmd'>\chapter</span><span class='ignore'>{</span><span class='hword'>相</span><span class='hword'>关</span><span class='hword'>技</span><span class='hword'>术</span><span class='hword'>分</span><span class='hword'>析</span><span class='ignore'>}</span><span class='cumsum'> [6]</span><br>
+<span class='cmd'>\chapter</span><span class='ignore'>{</span><span class='hword'>相</span><span class='hword'>关</span><span class='hword'>技</span><span class='hword'>术</span><span class='hword'>概</span><span class='hword'>述</span><span class='ignore'>}</span><span class='cumsum'> [6]</span><br>
 <span class='word'>SDN</span><span class='word'>作</span><span class='word'>为</span><span class='word'>新</span><span class='word'>一</span><span class='word'>代</span><span class='word'>的</span><span class='word'>网</span><span class='word'>络</span><span class='word'>架</span><span class='word'>构</span><span class='ignore'>，</span><span class='word'>具</span><span class='word'>有</span><span class='word'>动</span><span class='word'>态</span><span class='word'>配</span><span class='word'>置</span><span class='ignore'>、</span><span class='word'>可</span><span class='word'>编</span><span class='word'>程</span><span class='word'>及</span><span class='word'>快</span><span class='word'>速</span><span class='word'>响</span><span class='word'>应</span><span class='word'>的</span><span class='word'>特</span><span class='word'>点</span><span class='ignore'>，</span><span class='word'>通</span><span class='word'>过</span><span class='word'>解</span><span class='word'>耦</span><span class='word'>控</span><span class='word'>制</span><span class='word'>平</span><span class='word'>面</span><span class='word'>与</span><span class='word'>数</span><span class='word'>据</span><span class='word'>转</span><span class='word'>发</span><span class='word'>平</span><span class='word'>面</span><span class='ignore'>，</span><span class='word'>实</span><span class='word'>现</span><span class='word'>了</span><span class='word'>对</span><span class='word'>网</span><span class='word'>络</span><span class='word'>底</span><span class='word'>层</span><span class='word'>基</span><span class='word'>础</span><span class='word'>设</span><span class='word'>施</span><span class='word'>的</span><span class='word'>抽</span><span class='word'>象</span><span class='ignore'>。</span><span class='word'>OpenStack</span><span class='word'>是</span><span class='word'>当</span><span class='word'>下</span><span class='word'>最</span><span class='word'>流</span><span class='word'>行</span><span class='word'>的</span><span class='word'>开</span><span class='word'>源</span><span class='word'>云</span><span class='word'>平</span><span class='word'>台</span><span class='ignore'>，</span><span class='word'>为</span><span class='word'>用</span><span class='word'>户</span><span class='word'>提</span><span class='word'>供</span><span class='word'>计</span><span class='word'>算</span><span class='ignore'>、</span><span class='word'>存</span><span class='word'>储</span><span class='ignore'>、</span><span class='word'>网</span><span class='word'>络</span><span class='word'>服</span><span class='word'>务</span><span class='ignore'>。</span><span class='word'>本</span><span class='word'>章</span><span class='word'>对</span><span class='word'>SDN</span><span class='ignore'>、</span><span class='word'>OpenFlow</span><span class='ignore'>、</span><span class='word'>OpenStack</span><span class='word'>等</span><span class='word'>相</span><span class='word'>关</span><span class='word'>技</span><span class='word'>术</span><span class='word'>做</span><span class='word'>了</span><span class='word'>详</span><span class='word'>细</span><span class='word'>的</span><span class='word'>介</span><span class='word'>绍</span><span class='ignore'>。</span><span class='cumsum'> [108]</span><br>
 <span class='cmd'>\section</span><span class='ignore'>{</span><span class='hword'>SDN</span><span class='ignore'>、</span><span class='hword'>OpenFlow</span><span class='hword'>概</span><span class='hword'>述</span><span class='ignore'>}</span><span class='cumsum'> [4]</span><br>
 <span class='cmd'>\subsection</span><span class='ignore'>{</span><span class='hword'>SDN</span><span class='hword'>简</span><span class='hword'>介</span><span class='ignore'>}</span><span class='cumsum'> [3]</span><br>
@@ -658,7 +631,7 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <li>Subcounts:</li>
 <span class='subcount'>
 <li class='fielddesc'>&nbsp; text+headers+captions (#headers/#floats/#inlines/#displayed)</li>
-  <li>102+6+0 (1/0/0/0) Chapter: 相关技术分析</li>
+  <li>102+6+0 (1/0/0/0) Chapter: 相关技术概述</li>
   <li>0+4+0 (1/0/0/0) Section: SDN、OpenFlow概述</li>
   <li>684+3+10 (1/1/0/0) Subsection: SDN简介</li>
   <li>1298+3+0 (1/0/0/0) Subsection: OpenFlow协议</li>
@@ -669,6 +642,172 @@ table.stat .sum {font-weight:bold; font-style:italic;}
   <li>940+3+6 (1/1/0/0) Subsection: OpenStack架构</li>
   <li>933+5+16 (1/2/0/0) Subsection: Neutron模块详解</li>
   <li>180+4+0 (1/0/0/0) Section: 本章小结</li>
+</span>
+</ul>
+</div>
+<h2>File: ./ch_architecture.tex</h2>
+<div class='parse'><p>
+<span class='cmd'>\chapter</span><span class='ignore'>{</span><span class='hword'>基</span><span class='hword'>于</span><span class='hword'>SDN</span><span class='hword'>的</span><span class='hword'>云</span><span class='hword'>平</span><span class='hword'>台</span><span class='hword'>整</span><span class='hword'>体</span><span class='hword'>设</span><span class='hword'>计</span><span class='ignore'>}</span><span class='cumsum'> [11]</span><br>
+<span class='cmd'>\section</span><span class='ignore'>{</span><span class='hword'>关</span><span class='hword'>键</span><span class='hword'>技</span><span class='hword'>术</span><span class='hword'>分</span><span class='hword'>析</span><span class='ignore'>}</span><span class='cumsum'> [6]</span><br>
+<span class='cmd'>\subsection</span><span class='ignore'>{</span><span class='hword'>需</span><span class='hword'>求</span><span class='hword'>分</span><span class='hword'>析</span><span class='ignore'>}</span><span class='cumsum'> [4]</span><br>
+<span class='cmd'>\subsection</span><span class='ignore'>{</span><span class='hword'>系</span><span class='hword'>统</span><span class='hword'>整</span><span class='hword'>体</span><span class='hword'>功</span><span class='hword'>能</span><span class='hword'>架</span><span class='hword'>构</span><span class='ignore'>}</span><span class='cumsum'> [8]</span><br>
+<span class='cmd'>\section</span><span class='ignore'>{</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\section</span><span class='ignore'>{</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\section</span><span class='ignore'>{</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\subsection</span><span class='ignore'>{</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cumsum'> [0]</span><br>
+<span class='cumsum'> [0]</span><br>
+<span class='cumsum'> [0]</span><br>
+<span class='comment'>%% 本章参考文献</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\ifx</span><span class='cmd'>\usechapbib</span><span class='cmd'>\empty</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\nocite</span><span class='ignore'>{</span><span class='ignore'>BSTcontrol</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\setcounter</span><span class='ignore'>{</span><span class='ignore'>NAT</span><span class='ignore'>@</span><span class='ignore'>ctr</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>0</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\bibliographystyle</span><span class='ignore'>{</span><span class='ignore'>buptgraduatethesis</span><span class='ignore'>}</span><span class='cumsum'> [0]</span><br>
+<span class='cmd'>\bibliography</span><br>
+<span class='error'>File ch_architecture.bbl not found in path [./].</span><br>
+<span class='ignore'>{</span><span class='word'>bare</span><span class='ignore'>_</span><span class='word'>thesis</span><span class='ignore'>}</span><span class='cumsum'> [2]</span><br>
+<span class='cmd'>\fi</span></p></div>
+<div class='count'>
+<ul class='count'>
+<li class='header'>Included file: ./ch_architecture.tex</li>
+<li>Encoding: utf8</li>
+<li>Sum count: 31</li>
+<li>Words in text: 2</li>
+<li>Words in headers: 29</li>
+<li>Words outside text (captions, etc.): 0</li>
+<li>Number of headers: 8</li>
+<li>Number of floats/tables/figures: 0</li>
+<li>Number of math inlines: 0</li>
+<li>Number of math displayed: 0</li>
+<li>Subcounts:</li>
+<span class='subcount'>
+<li class='fielddesc'>&nbsp; text+headers+captions (#headers/#floats/#inlines/#displayed)</li>
+  <li>0+11+0 (1/0/0/0) Chapter: 基于SDN的云平台整体设计</li>
+  <li>0+6+0 (1/0/0/0) Section: 关键技术分析</li>
+  <li>0+4+0 (1/0/0/0) Subsection: 需求分析</li>
+  <li>0+8+0 (1/0/0/0) Subsection: 系统整体功能架构</li>
+  <li>0+0+0 (1/0/0/0) Section: </li>
+  <li>0+0+0 (1/0/0/0) Section: </li>
+  <li>0+0+0 (1/0/0/0) Section: </li>
+  <li>2+0+0 (1/0/0/0) Subsection: </li>
+</span>
+</ul>
+</div>
+<h2>File: ./ch_module.tex</h2>
+<div class='parse'><p>
+<span class='cmd'>\chapter</span><span class='ignore'>{</span><span class='hword'>系</span><span class='hword'>统</span><span class='hword'>各</span><span class='hword'>模</span><span class='hword'>块</span><span class='hword'>设</span><span class='hword'>计</span><span class='ignore'>}</span><span class='cumsum'> [7]</span><br>
+<span class='cmd'>\section</span><span class='ignore'>{</span><span class='hword'>xxx</span><span class='ignore'>}</span><span class='cumsum'> [1]</span><br>
+<span class='cmd'>\subsection</span><span class='ignore'>{</span><span class='hword'>xxxx</span><span class='ignore'>}</span><span class='cumsum'> [1]</span><br>
+<span class='cumsum'> [1]</span><br>
+<span class='cumsum'> [1]</span><br>
+<span class='cumsum'> [1]</span><br>
+<span class='comment'>%% 本章参考文献</span><span class='cumsum'> [1]</span><br>
+<span class='cmd'>\ifx</span><span class='cmd'>\usechapbib</span><span class='cmd'>\empty</span><span class='cumsum'> [1]</span><br>
+<span class='cmd'>\nocite</span><span class='ignore'>{</span><span class='ignore'>BSTcontrol</span><span class='ignore'>}</span><span class='cumsum'> [1]</span><br>
+<span class='cmd'>\setcounter</span><span class='ignore'>{</span><span class='ignore'>NAT</span><span class='ignore'>@</span><span class='ignore'>ctr</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>0</span><span class='ignore'>}</span><span class='cumsum'> [1]</span><br>
+<span class='cmd'>\bibliographystyle</span><span class='ignore'>{</span><span class='ignore'>buptgraduatethesis</span><span class='ignore'>}</span><span class='cumsum'> [1]</span><br>
+<span class='cmd'>\bibliography</span><br>
+<span class='error'>File ch_module.bbl not found in path [./].</span><br>
+<span class='ignore'>{</span><span class='word'>bare</span><span class='ignore'>_</span><span class='word'>thesis</span><span class='ignore'>}</span><span class='cumsum'> [3]</span><br>
+<span class='cmd'>\fi</span></p></div>
+<div class='count'>
+<ul class='count'>
+<li class='header'>Included file: ./ch_module.tex</li>
+<li>Encoding: utf8</li>
+<li>Sum count: 11</li>
+<li>Words in text: 2</li>
+<li>Words in headers: 9</li>
+<li>Words outside text (captions, etc.): 0</li>
+<li>Number of headers: 3</li>
+<li>Number of floats/tables/figures: 0</li>
+<li>Number of math inlines: 0</li>
+<li>Number of math displayed: 0</li>
+<li>Subcounts:</li>
+<span class='subcount'>
+<li class='fielddesc'>&nbsp; text+headers+captions (#headers/#floats/#inlines/#displayed)</li>
+  <li>0+7+0 (1/0/0/0) Chapter: 系统各模块设计</li>
+  <li>0+1+0 (1/0/0/0) Section: xxx</li>
+  <li>2+1+0 (1/0/0/0) Subsection: xxxx</li>
+</span>
+</ul>
+</div>
+<h2>File: ./ch_implement.tex</h2>
+<div class='parse'><p>
+<span class='cmd'>\chapter</span><span class='ignore'>{</span><span class='hword'>系</span><span class='hword'>统</span><span class='hword'>功</span><span class='hword'>能</span><span class='hword'>实</span><span class='hword'>现</span><span class='ignore'>}</span><span class='cumsum'> [6]</span><br>
+<span class='cmd'>\section</span><span class='ignore'>{</span><span class='hword'>xxx</span><span class='ignore'>}</span><span class='cumsum'> [1]</span><br>
+<span class='cmd'>\subsection</span><span class='ignore'>{</span><span class='hword'>xxxx</span><span class='ignore'>}</span><span class='cumsum'> [1]</span><br>
+<span class='cumsum'> [1]</span><br>
+<span class='word'>1</span><span class='ignore'>、</span><span class='word'>控</span><span class='word'>制</span><span class='word'>器</span><span class='word'>功</span><span class='word'>能</span><span class='ignore'>（</span><span class='word'>带</span><span class='word'>宽</span><span class='ignore'>、</span><span class='word'>时</span><span class='word'>延</span><span class='ignore'>、</span><span class='word'>定</span><span class='word'>制</span><span class='word'>化</span><span class='word'>流</span><span class='word'>表</span><span class='word'>下</span><span class='word'>发</span><span class='ignore'>）</span><span class='cumsum'> [18]</span><br>
+<span class='word'>2</span><span class='ignore'>、</span><span class='word'>通</span><span class='word'>信</span><span class='word'>模</span><span class='word'>块</span><span class='ignore'>（</span><span class='word'>RabbitMQ</span><span class='ignore'>）</span><span class='cumsum'> [24]</span><br>
+<span class='word'>3</span><span class='ignore'>、</span><span class='word'>GUI</span><span class='word'>模</span><span class='word'>块</span><span class='ignore'>（</span><span class='word'>前</span><span class='word'>端</span><span class='word'>的</span><span class='word'>各</span><span class='word'>种</span><span class='word'>功</span><span class='word'>能</span><span class='word'>显</span><span class='word'>示</span><span class='ignore'>）</span><span class='cumsum'> [37]</span><br>
+<span class='word'>4</span><span class='ignore'>、</span><span class='word'>网</span><span class='word'>络</span><span class='word'>虚</span><span class='word'>拟</span><span class='word'>化</span><span class='word'>模</span><span class='word'>块</span><span class='ignore'>（</span><span class='word'>封</span><span class='word'>装</span><span class='word'>自</span><span class='word'>动</span><span class='word'>创</span><span class='word'>建</span><span class='word'>和</span><span class='word'>手</span><span class='word'>动</span><span class='word'>创</span><span class='word'>建</span><span class='word'>API</span><span class='ignore'>）</span><span class='cumsum'> [57]</span><br>
+<span class='cumsum'> [57]</span><br>
+<span class='cumsum'> [57]</span><br>
+<span class='comment'>%% 本章参考文献</span><span class='cumsum'> [57]</span><br>
+<span class='cmd'>\ifx</span><span class='cmd'>\usechapbib</span><span class='cmd'>\empty</span><span class='cumsum'> [57]</span><br>
+<span class='cmd'>\nocite</span><span class='ignore'>{</span><span class='ignore'>BSTcontrol</span><span class='ignore'>}</span><span class='cumsum'> [57]</span><br>
+<span class='cmd'>\setcounter</span><span class='ignore'>{</span><span class='ignore'>NAT</span><span class='ignore'>@</span><span class='ignore'>ctr</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>0</span><span class='ignore'>}</span><span class='cumsum'> [57]</span><br>
+<span class='cmd'>\bibliographystyle</span><span class='ignore'>{</span><span class='ignore'>buptgraduatethesis</span><span class='ignore'>}</span><span class='cumsum'> [57]</span><br>
+<span class='cmd'>\bibliography</span><br>
+<span class='error'>File ch_implement.bbl not found in path [./].</span><br>
+<span class='ignore'>{</span><span class='word'>bare</span><span class='ignore'>_</span><span class='word'>thesis</span><span class='ignore'>}</span><span class='cumsum'> [59]</span><br>
+<span class='cmd'>\fi</span></p></div>
+<div class='count'>
+<ul class='count'>
+<li class='header'>Included file: ./ch_implement.tex</li>
+<li>Encoding: utf8</li>
+<li>Sum count: 66</li>
+<li>Words in text: 58</li>
+<li>Words in headers: 8</li>
+<li>Words outside text (captions, etc.): 0</li>
+<li>Number of headers: 3</li>
+<li>Number of floats/tables/figures: 0</li>
+<li>Number of math inlines: 0</li>
+<li>Number of math displayed: 0</li>
+<li>Subcounts:</li>
+<span class='subcount'>
+<li class='fielddesc'>&nbsp; text+headers+captions (#headers/#floats/#inlines/#displayed)</li>
+  <li>0+6+0 (1/0/0/0) Chapter: 系统功能实现</li>
+  <li>0+1+0 (1/0/0/0) Section: xxx</li>
+  <li>58+1+0 (1/0/0/0) Subsection: xxxx</li>
+</span>
+</ul>
+</div>
+<h2>File: ./ch_conclusion.tex</h2>
+<div class='parse'><p>
+<span class='cmd'>\chapter</span><span class='ignore'>{</span><span class='hword'>总</span><span class='hword'>结</span><span class='hword'>和</span><span class='hword'>展</span><span class='hword'>望</span><span class='ignore'>}</span><span class='cumsum'> [5]</span><br>
+<span class='cmd'>\section</span><span class='ignore'>{</span><span class='hword'>论</span><span class='hword'>文</span><span class='hword'>工</span><span class='hword'>作</span><span class='hword'>总</span><span class='hword'>结</span><span class='ignore'>}</span><span class='cumsum'> [6]</span><br>
+<span class='cmd'>\section</span><span class='ignore'>{</span><span class='hword'>存</span><span class='hword'>在</span><span class='hword'>的</span><span class='hword'>问</span><span class='hword'>题</span><span class='hword'>及</span><span class='hword'>展</span><span class='hword'>望</span><span class='ignore'>}</span><span class='cumsum'> [8]</span><br>
+<span class='cumsum'> [8]</span><br>
+<span class='cumsum'> [8]</span><br>
+<span class='cumsum'> [8]</span><br>
+<span class='comment'>%% 本章参考文献</span><span class='cumsum'> [8]</span><br>
+<span class='cmd'>\ifx</span><span class='cmd'>\usechapbib</span><span class='cmd'>\empty</span><span class='cumsum'> [8]</span><br>
+<span class='cmd'>\nocite</span><span class='ignore'>{</span><span class='ignore'>BSTcontrol</span><span class='ignore'>}</span><span class='cumsum'> [8]</span><br>
+<span class='cmd'>\setcounter</span><span class='ignore'>{</span><span class='ignore'>NAT</span><span class='ignore'>@</span><span class='ignore'>ctr</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='ignore'>0</span><span class='ignore'>}</span><span class='cumsum'> [8]</span><br>
+<span class='cmd'>\bibliographystyle</span><span class='ignore'>{</span><span class='ignore'>buptgraduatethesis</span><span class='ignore'>}</span><span class='cumsum'> [8]</span><br>
+<span class='cmd'>\bibliography</span><br>
+<span class='error'>File ch_conclusion.bbl not found in path [./].</span><br>
+<span class='ignore'>{</span><span class='word'>bare</span><span class='ignore'>_</span><span class='word'>thesis</span><span class='ignore'>}</span><span class='cumsum'> [10]</span><br>
+<span class='cmd'>\fi</span></p></div>
+<div class='count'>
+<ul class='count'>
+<li class='header'>Included file: ./ch_conclusion.tex</li>
+<li>Encoding: utf8</li>
+<li>Sum count: 21</li>
+<li>Words in text: 2</li>
+<li>Words in headers: 19</li>
+<li>Words outside text (captions, etc.): 0</li>
+<li>Number of headers: 3</li>
+<li>Number of floats/tables/figures: 0</li>
+<li>Number of math inlines: 0</li>
+<li>Number of math displayed: 0</li>
+<li>Subcounts:</li>
+<span class='subcount'>
+<li class='fielddesc'>&nbsp; text+headers+captions (#headers/#floats/#inlines/#displayed)</li>
+  <li>0+5+0 (1/0/0/0) Chapter: 总结和展望</li>
+  <li>0+6+0 (1/0/0/0) Section: 论文工作总结</li>
+  <li>2+8+0 (1/0/0/0) Section: 存在的问题及展望</li>
 </span>
 </ul>
 </div>
@@ -740,104 +879,6 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <li>Number of math displayed: 4</li>
 </ul>
 </div>
-<h2>File: ./bare_thesis.bbl</h2>
-<div class='parse'><p>
-<span class='comment'>% Generated by BUPTGraduateThesis.bst, version: 4.0 (2015/01/02)</span><span class='cumsum'> [0]</span><br>
-<span class='envir'>\begin</span><span class='envir'>{thebibliography}</span><span class='ignore'>{</span><span class='ignore'>10</span><span class='ignore'>}</span><span class='cumsum'> [1]</span><br>
-<span class='cumsum'> [1]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>SDN-1</span><span class='ignore'>}</span><span class='cumsum'> [1]</span><br>
-<span class='word'>Porras</span> <span class='word'>P</span><span class='ignore'>,</span> <span class='word'>Shin</span> <span class='word'>S</span><span class='ignore'>,</span> <span class='word'>Yegneswaran</span> <span class='word'>V</span><span class='ignore'>.</span><span class='cumsum'> [7]</span><br>
-<span class='word'>A</span> <span class='word'>security</span> <span class='word'>enforcement</span> <span class='word'>kernel</span> <span class='word'>for</span> <span class='word'>Open</span> <span class='word'>Flow</span> <span class='word'>networks</span><span class='ignore'>[</span><span class='word'>A</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [16]</span><br>
-<span class='ignore'>~</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='ignore'>~</span><span class='word'>The</span> <span class='word'>1st</span> <span class='word'>Workshop</span> <span class='word'>on</span> <span class='word'>Hot</span> <span class='word'>Topics</span> <span class='word'>in</span> <span class='word'>Software</span> <span class='word'>Defined</span> <span class='word'>Networks</span><span class='ignore'>[</span><span class='word'>C</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [27]</span><br>
-<span class='word'>New</span> <span class='word'>York</span><span class='ignore'>:</span> <span class='word'>ACM</span> <span class='word'>Press</span><span class='ignore'>,</span> <span class='word'>2012</span><span class='ignore'>:</span> <span class='word'>121</span><span class='ignore'>-</span><span class='ignore'>-</span><span class='word'>126</span><span class='ignore'>.</span><span class='cumsum'> [34]</span><br>
-<span class='cumsum'> [34]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>Virtual-1</span><span class='ignore'>}</span><span class='cumsum'> [34]</span><br>
-<span class='word'>Wang</span> <span class='word'>A</span><span class='ignore'>,</span> <span class='word'>Iyer</span> <span class='word'>M</span><span class='ignore'>,</span> <span class='word'>Dutta</span> <span class='word'>R</span><span class='ignore'>,</span> <span class='word'>et</span><span class='ignore'>~</span><span class='word'>al</span><span class='ignore'>.</span><span class='cumsum'> [42]</span><br>
-<span class='word'>Network</span> <span class='word'>Virtualization</span><span class='ignore'>:</span> <span class='word'>Technologies</span><span class='ignore'>,</span> <span class='word'>Perspectives</span><span class='ignore'>,</span> <span class='word'>and</span> <span class='word'>Frontiers</span><span class='ignore'>[</span><span class='word'>J</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [49]</span><br>
-<span class='word'>Journal</span> <span class='word'>of</span> <span class='word'>Lightwave</span> <span class='word'>Technology</span><span class='ignore'>,</span> <span class='word'>2013</span><span class='ignore'>,</span> <span class='word'>31</span><span class='ignore'>(</span><span class='word'>4</span><span class='ignore'>)</span><span class='ignore'>:</span> <span class='word'>523</span><span class='ignore'>-</span><span class='ignore'>-</span><span class='word'>537</span><span class='ignore'>.</span><span class='cumsum'> [58]</span><br>
-<span class='cumsum'> [58]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>OpenStack-1</span><span class='ignore'>}</span><span class='cumsum'> [58]</span><br>
-<span class='word'>Hua-YingChang</span><span class='ignore'>,</span> <span class='word'>Shie-YuanWang</span><span class='ignore'>.</span><span class='cumsum'> [60]</span><br>
-<span class='word'>Using</span> <span class='word'>SDN</span> <span class='word'>technology</span> <span class='word'>to</span> <span class='word'>mitigate</span> <span class='word'>congestion</span> <span class='word'>in</span> <span class='word'>the</span> <span class='word'>OpenStack</span> <span class='word'>data</span> <span class='word'>center</span><span class='cumsum'> [71]</span><br>
-&nbsp; <span class='word'>network</span><span class='ignore'>[</span><span class='word'>A</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [73]</span><br>
-<span class='ignore'>~</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='ignore'>~</span><span class='ignore'>(</span><span class='word'>ICC</span><span class='ignore'>)</span><span class='ignore'>[</span><span class='word'>C</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [75]</span><br>
-<span class='word'>IEEE</span><span class='ignore'>,</span> <span class='word'>2015</span><span class='ignore'>:</span> <span class='word'>401</span><span class='ignore'>-</span><span class='ignore'>-</span><span class='word'>406</span><span class='ignore'>.</span><span class='cumsum'> [79]</span><br>
-<span class='cumsum'> [79]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>OpenStack-2</span><span class='ignore'>}</span><span class='cumsum'> [79]</span><br>
-<span class='word'>Feller</span> <span class='word'>E</span><span class='ignore'>,</span> <span class='word'>Rilling</span> <span class='word'>L</span><span class='ignore'>,</span> <span class='word'>Morin</span> <span class='word'>C</span><span class='ignore'>,</span> <span class='word'>et</span><span class='ignore'>~</span><span class='word'>al</span><span class='ignore'>.</span><span class='cumsum'> [87]</span><br>
-<span class='word'>A</span> <span class='word'>scalable</span> <span class='word'>and</span> <span class='word'>autonomic</span> <span class='word'>virtual</span> <span class='word'>machine</span> <span class='word'>management</span> <span class='word'>framework</span> <span class='word'>for</span> <span class='word'>private</span><span class='cumsum'> [97]</span><br>
-&nbsp; <span class='word'>clouds</span><span class='ignore'>[</span><span class='word'>A</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [99]</span><br>
-<span class='ignore'>~</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='ignore'>~</span><span class='word'>Proceedings</span> <span class='word'>of</span> <span class='word'>the</span> <span class='word'>2012</span> <span class='word'>12th</span> <span class='word'>IEEE</span><span class='ignore'>/</span><span class='word'>ACM</span> <span class='word'>International</span> <span class='word'>Symposium</span> <span class='word'>on</span><span class='cumsum'> [109]</span><br>
-&nbsp; <span class='word'>Cluster</span><span class='ignore'>[</span><span class='word'>C</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [111]</span><br>
-<span class='word'>IEEE</span> <span class='word'>Computer</span> <span class='word'>Society</span><span class='ignore'>,</span> <span class='word'>2012</span><span class='ignore'>:</span> <span class='word'>482</span><span class='ignore'>-</span><span class='ignore'>-</span><span class='word'>489</span><span class='ignore'>.</span><span class='cumsum'> [117]</span><br>
-<span class='cumsum'> [117]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>OVX-1</span><span class='ignore'>}</span><span class='cumsum'> [117]</span><br>
-<span class='word'>OpenVirteX</span> <span class='word'>web</span> <span class='word'>site</span><span class='ignore'>[</span><span class='word'>EB</span><span class='ignore'>/</span><span class='word'>OL</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [122]</span><br>
-<span class='cmd'>\url</span><span class='ignore'>{</span><span class='word'>http</span><span class='ignore'>:</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='word'>ovx.onlab.us</span><span class='ignore'>/</span><span class='ignore'>}</span><span class='ignore'>.</span><span class='cumsum'> [124]</span><br>
-<span class='cumsum'> [124]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>Ryu-1</span><span class='ignore'>}</span><span class='cumsum'> [124]</span><br>
-<span class='word'>Ryu</span> <span class='word'>web</span> <span class='word'>site</span><span class='ignore'>[</span><span class='word'>EB</span><span class='ignore'>/</span><span class='word'>OL</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [129]</span><br>
-<span class='cmd'>\url</span><span class='ignore'>{</span><span class='word'>https</span><span class='ignore'>:</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='word'>osrg.github.io</span><span class='ignore'>/</span><span class='word'>Ryu</span><span class='ignore'>/</span><span class='ignore'>}</span><span class='ignore'>.</span><span class='cumsum'> [132]</span><br>
-<span class='cumsum'> [132]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>BUPT</span><span class='ignore'>_</span><span class='ignore'>Thesis</span><span class='ignore'>_</span><span class='ignore'>Format</span><span class='ignore'>_</span><span class='ignore'>2014</span><span class='ignore'>}</span><span class='cumsum'> [132]</span><br>
-<span class='word'>北</span><span class='word'>京</span><span class='word'>邮</span><span class='word'>电</span><span class='word'>大</span><span class='word'>学</span><span class='word'>研</span><span class='word'>究</span><span class='word'>生</span><span class='word'>院</span><span class='word'>培</span><span class='word'>养</span><span class='word'>与</span><span class='word'>学</span><span class='word'>位</span><span class='word'>办</span><span class='word'>公</span><span class='word'>室</span><span class='ignore'>.</span><span class='cumsum'> [150]</span><br>
-<span class='word'>关</span><span class='word'>于</span><span class='word'>研</span><span class='word'>究</span><span class='word'>生</span><span class='word'>学</span><span class='word'>位</span><span class='word'>论</span><span class='word'>文</span><span class='word'>格</span><span class='word'>式</span><span class='word'>的</span><span class='word'>统</span><span class='word'>一</span><span class='word'>要</span><span class='word'>求</span><span class='ignore'>[</span><span class='word'>EB</span><span class='ignore'>/</span><span class='word'>OL</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [168]</span><br>
-<span class='cmd'>\url</span><span class='ignore'>{</span><span class='word'>http</span><span class='ignore'>:</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='word'>www.bupt.edu.cn</span><span class='ignore'>/</span><span class='ignore'>}</span><span class='ignore'>,</span> <span class='word'>2014</span><span class='ignore'>-</span><span class='ignore'>-</span><span class='word'>11</span><span class='ignore'>.</span><span class='cumsum'> [172]</span><br>
-<span class='cumsum'> [172]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>BUPT</span><span class='ignore'>_</span><span class='ignore'>Thesis</span><span class='ignore'>_</span><span class='ignore'>Format</span><span class='ignore'>_</span><span class='ignore'>2004</span><span class='ignore'>}</span><span class='cumsum'> [172]</span><br>
-<span class='word'>北</span><span class='word'>京</span><span class='word'>邮</span><span class='word'>电</span><span class='word'>大</span><span class='word'>学</span><span class='word'>研</span><span class='word'>究</span><span class='word'>生</span><span class='word'>院</span><span class='word'>培</span><span class='word'>养</span><span class='word'>与</span><span class='word'>学</span><span class='word'>位</span><span class='word'>办</span><span class='word'>公</span><span class='word'>室</span><span class='ignore'>.</span><span class='cumsum'> [190]</span><br>
-<span class='word'>关</span><span class='word'>于</span><span class='word'>研</span><span class='word'>究</span><span class='word'>生</span><span class='word'>学</span><span class='word'>位</span><span class='word'>论</span><span class='word'>文</span><span class='word'>格</span><span class='word'>式</span><span class='word'>的</span><span class='word'>统</span><span class='word'>一</span><span class='word'>要</span><span class='word'>求</span><span class='ignore'>[</span><span class='word'>EB</span><span class='ignore'>/</span><span class='word'>OL</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [208]</span><br>
-<span class='cmd'>\url</span><span class='ignore'>{</span><span class='word'>http</span><span class='ignore'>:</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='word'>www.bupt.edu.cn</span><span class='ignore'>/</span><span class='ignore'>}</span><span class='ignore'>,</span> <span class='word'>2004</span><span class='ignore'>.</span><span class='cumsum'> [211]</span><br>
-<span class='cumsum'> [211]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>openflow-1</span><span class='ignore'>}</span><span class='cumsum'> [211]</span><br>
-<span class='word'>左</span><span class='word'>青</span><span class='word'>云</span><span class='ignore'>,</span> <span class='word'>陈</span><span class='word'>鸣</span><span class='ignore'>.</span><span class='cumsum'> [216]</span><br>
-<span class='word'>基</span><span class='word'>于</span><span class='word'>OpenFlow</span><span class='word'>的</span><span class='word'>SDN</span><span class='word'>技</span><span class='word'>术</span><span class='word'>研</span><span class='word'>究</span><span class='ignore'>[</span><span class='word'>J</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [226]</span><br>
-<span class='word'>软</span><span class='word'>件</span><span class='word'>学</span><span class='word'>报</span><span class='ignore'>,</span> <span class='word'>2013</span><span class='ignore'>,</span> <span class='word'>24</span><span class='ignore'>(</span><span class='word'>5</span><span class='ignore'>)</span><span class='ignore'>:</span> <span class='word'>1081</span><span class='ignore'>-</span><span class='ignore'>-</span><span class='word'>1083</span><span class='ignore'>.</span><span class='cumsum'> [235]</span><br>
-<span class='cumsum'> [235]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>openflow-2</span><span class='ignore'>}</span><span class='cumsum'> [235]</span><br>
-<span class='word'>OpenFlow</span> <span class='word'>setup</span> <span class='word'>website</span><span class='ignore'>[</span><span class='word'>EB</span><span class='ignore'>/</span><span class='word'>OL</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [240]</span><br>
-<span class='cmd'>\url</span><span class='ignore'>{</span><span class='ignore'>[</span><span class='word'>4</span><span class='ignore'>]</span><span class='word'>http</span><span class='ignore'>:</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='word'>www.openflow.org</span><span class='ignore'>/</span><span class='word'>wp</span><span class='ignore'>/</span><span class='word'>deploy-labsetup</span><span class='ignore'>}</span><span class='ignore'>.</span><span class='cumsum'> [245]</span><br>
-<span class='cumsum'> [245]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>openflow-3</span><span class='ignore'>}</span><span class='cumsum'> [245]</span><br>
-<span class='word'>Pfaff</span> <span class='word'>B</span><span class='ignore'>,</span> <span class='word'>Pettit</span> <span class='word'>J</span><span class='ignore'>,</span> <span class='word'>Koponen</span> <span class='word'>T</span><span class='ignore'>,</span> <span class='word'>et</span><span class='ignore'>~</span><span class='word'>al</span><span class='ignore'>.</span><span class='cumsum'> [253]</span><br>
-<span class='word'>Extending</span> <span class='word'>networking</span> <span class='word'>into</span> <span class='word'>the</span> <span class='word'>virtualization</span> <span class='word'>layer</span><span class='ignore'>[</span><span class='word'>A</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [260]</span><br>
-<span class='ignore'>~</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='ignore'>~</span><span class='word'>Proc</span><span class='ignore'>.</span> <span class='word'>of</span> <span class='word'>the</span> <span class='word'>7th</span> <span class='word'>ACM</span> <span class='word'>SIGCOMM</span> <span class='word'>Workshop</span> <span class='word'>on</span> <span class='word'>Hot</span> <span class='word'>Topics</span> <span class='word'>in</span> <span class='word'>Networks</span><span class='cumsum'> [272]</span><br>
-&nbsp; <span class='ignore'>(</span><span class='word'>HotNets</span><span class='ignore'>)</span><span class='ignore'>[</span><span class='word'>C</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [274]</span><br>
-<span class='word'>New</span> <span class='word'>York</span><span class='ignore'>:</span> <span class='word'>ACM</span> <span class='word'>Press</span><span class='ignore'>,</span> <span class='word'>2009</span><span class='ignore'>.</span><span class='cumsum'> [279]</span><br>
-<span class='cumsum'> [279]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>openflow-4</span><span class='ignore'>}</span><span class='cumsum'> [279]</span><br>
-<span class='word'>Naous</span> <span class='word'>J</span><span class='ignore'>,</span> <span class='word'>Erickson</span> <span class='word'>D</span><span class='ignore'>,</span> <span class='word'>Covington</span> <span class='word'>G</span><span class='ignore'>,</span> <span class='word'>et</span><span class='ignore'>~</span><span class='word'>al</span><span class='ignore'>.</span><span class='cumsum'> [287]</span><br>
-<span class='word'>Implementing</span> <span class='word'>an</span> <span class='word'>OpenFlow</span> <span class='word'>switch</span> <span class='word'>on</span> <span class='word'>the</span> <span class='word'>NetFPGA</span><span class='ignore'>[</span><span class='word'>A</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [295]</span><br>
-<span class='ignore'>~</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='ignore'>~</span><span class='word'>Proc</span><span class='ignore'>.</span> <span class='word'>Of</span> <span class='word'>the</span> <span class='word'>4th</span> <span class='word'>ACM</span><span class='ignore'>/</span><span class='word'>IEEE</span> <span class='word'>Symp</span><span class='ignore'>.</span> <span class='word'>on</span> <span class='word'>Architectures</span> <span class='word'>for</span> <span class='word'>Networking</span> <span class='word'>and</span><span class='cumsum'> [307]</span><br>
-&nbsp; <span class='word'>Communications</span> <span class='word'>Systems</span> <span class='ignore'>(</span><span class='word'>ANCS</span><span class='ignore'>)</span><span class='ignore'>[</span><span class='word'>C</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [311]</span><br>
-<span class='word'>San</span> <span class='word'>Jose</span><span class='ignore'>:</span> <span class='word'>ACM</span> <span class='word'>Press</span><span class='ignore'>,</span> <span class='word'>2008</span><span class='ignore'>:</span> <span class='word'>1</span><span class='ignore'>-</span><span class='ignore'>-</span><span class='word'>9</span><span class='ignore'>.</span><span class='cumsum'> [318]</span><br>
-<span class='cumsum'> [318]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>OVX-2</span><span class='ignore'>}</span><span class='cumsum'> [318]</span><br>
-<span class='word'>Al-Shabibi</span> <span class='word'>A</span><span class='ignore'>,</span> <span class='word'>Leenheer</span> <span class='word'>M</span><span class='ignore'>,</span> <span class='word'>Gerola</span> <span class='word'>M</span><span class='ignore'>,</span> <span class='word'>et</span><span class='ignore'>~</span><span class='word'>al</span><span class='ignore'>.</span><span class='cumsum'> [326]</span><br>
-<span class='word'>OpenVirteX</span><span class='ignore'>:</span> <span class='word'>A</span> <span class='word'>Network</span> <span class='word'>Hypervisor</span><span class='ignore'>[</span><span class='word'>A</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [331]</span><br>
-<span class='ignore'>~</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='ignore'>~</span><span class='word'>Open</span> <span class='word'>Networking</span> <span class='word'>Summit</span> <span class='word'>2014</span><span class='ignore'>[</span><span class='word'>C</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [336]</span><br>
-<span class='word'>2014</span><span class='ignore'>.</span><span class='cumsum'> [337]</span><br>
-<span class='cumsum'> [337]</span><br>
-<span class='cmd'>\bibitem</span><span class='ignore'>{</span><span class='ignore'>OpenStack-3</span><span class='ignore'>}</span><span class='cumsum'> [337]</span><br>
-<span class='word'>OpenStack</span> <span class='word'>web</span> <span class='word'>site</span><span class='ignore'>[</span><span class='word'>EB</span><span class='ignore'>/</span><span class='word'>OL</span><span class='ignore'>]</span><span class='ignore'>.</span><span class='cumsum'> [342]</span><br>
-<span class='cmd'>\url</span><span class='ignore'>{</span><span class='word'>http</span><span class='ignore'>:</span><span class='ignore'>/</span><span class='ignore'>/</span><span class='word'>docs.openstack.org</span><span class='ignore'>/</span><span class='ignore'>}</span><span class='ignore'>.</span><span class='cumsum'> [344]</span><br>
-<span class='cumsum'> [344]</span><br>
-<span class='envir'>\end</span><span class='envir'>{thebibliography}</span><span class='cumsum'> [344]</span><br>
-</p></div>
-<div class='count'>
-<ul class='count'>
-<li class='header'>Included file: ./bare_thesis.bbl</li>
-<li>Encoding: utf8</li>
-<li>Sum count: 344</li>
-<li>Words in text: 343</li>
-<li>Words in headers: 1</li>
-<li>Words outside text (captions, etc.): 0</li>
-<li>Number of headers: 1</li>
-<li>Number of floats/tables/figures: 0</li>
-<li>Number of math inlines: 0</li>
-<li>Number of math displayed: 0</li>
-</ul>
-</div>
 <h2>File: ./ackgmt.tex</h2>
 <div class='parse'><p>
 <span class='comment'>%%</span><span class='cumsum'> [0]</span><br>
@@ -854,16 +895,32 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <span class='envir'>\begin</span><span class='envir'>{acknowledgement}</span><span class='cumsum'> [0]</span><br>
 &nbsp;<span class='comment'>%% 感谢所有你应该感谢的人</span><span class='cumsum'> [0]</span><br>
 &nbsp;<span class='word'>感</span><span class='word'>谢</span><span class='word'>Donald</span> <span class='word'>Ervin</span> <span class='word'>Knuth</span><span class='ignore'>.</span><span class='cumsum'> [5]</span><br>
-<span class='envir'>\end</span><span class='envir'>{acknowledgement}</span><span class='cumsum'> [5]</span><br>
+<span class='cumsum'> [5]</span><br>
+ <span class='cmd'>\definecolor</span><span class='ignore'>{</span><span class='word'>bg</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='word'>rgb</span><span class='ignore'>}</span><span class='ignore'>{</span><span class='word'>0.95</span><span class='ignore'>,</span><span class='word'>0.95</span><span class='ignore'>,</span><span class='word'>0.95</span><span class='ignore'>}</span><span class='cumsum'> [10]</span><br>
+<span class='envir'>\begin</span><span class='envir'>{center}</span><span class='cumsum'> [10]</span><br>
+<span class='comment'>%xleftmargin=0.4\textwidth</span><span class='cumsum'> [10]</span><br>
+<span class='envir'>\begin</span><span class='envir'>{minted}</span><span class='option'>[linenos=false,fontsize=\scriptsize,bgcolor=bg]</span><span class='ignore'>{</span><span class='word'>python</span><span class='ignore'>}</span> <span class='cumsum'> [11]</span><br>
+<span class='word'>def</span> <span class='word'>create</span><span class='ignore'>(</span><span class='ignore'>)</span><span class='ignore'>:</span><span class='cumsum'> [13]</span><br>
+&nbsp; &nbsp; <span class='word'>pass</span><span class='cumsum'> [14]</span><br>
+<span class='word'>class</span> <span class='word'>Test</span><span class='ignore'>(</span><span class='ignore'>)</span><span class='ignore'>:</span><span class='cumsum'> [16]</span><br>
+&nbsp; &nbsp; <span class='word'>def</span> <span class='ignore'>_</span><span class='ignore'>_</span><span class='word'>init</span><span class='ignore'>_</span><span class='ignore'>_</span><span class='ignore'>(</span><span class='ignore'>)</span><span class='ignore'>:</span><span class='cumsum'> [18]</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class='word'>pass</span><span class='cumsum'> [19]</span><br>
+<span class='envir'>\end</span><span class='envir'>{minted}</span><span class='cumsum'> [19]</span><br>
+<span class='envir'>\end</span><span class='envir'>{center}</span><span class='cumsum'> [19]</span><br>
+<span class='cumsum'> [19]</span><br>
+<span class='word'>脚</span><span class='word'>注</span><span class='word'>使</span><span class='word'>用</span><span class='word'>带</span><span class='word'>圈</span><span class='word'>数</span><span class='word'>字</span><span class='word'>的</span><span class='word'>表</span><span class='word'>示</span><span class='word'>方</span><span class='word'>法</span><span class='ignore'>，</span><span class='word'>此</span><span class='word'>处</span><span class='word'>为</span><span class='word'>示</span><span class='word'>例</span> <span class='word'>1</span><span class='cmd'>\footnote</span><span class='ignore'>{</span><span class='oword'>测</span><span class='oword'>试</span><span class='oword'>脚</span><span class='oword'>注</span><span class='oword'>一</span><span class='ignore'>}</span> <span class='word'>和</span><span class='word'>示</span><span class='word'>例</span> <span class='word'>2</span><span class='cmd'>\footnote</span><span class='ignore'>{</span><span class='oword'>测</span><span class='oword'>试</span><span class='oword'>脚</span><span class='oword'>注</span><span class='oword'>二</span><span class='ignore'>}</span><span class='ignore'>。</span><span class='cumsum'> [52]</span><br>
+<span class='word'>参</span><span class='word'>考</span><span class='word'>文</span><span class='word'>献</span><span class='word'>可</span><span class='word'>以</span><span class='word'>使</span><span class='word'>用</span><span class='cmd'>\cite</span><span class='ignore'>{</span><span class='ignore'>BUPT</span><span class='ignore'>_</span><span class='ignore'>Thesis</span><span class='ignore'>_</span><span class='ignore'>Format</span><span class='ignore'>_</span><span class='ignore'>2014</span><span class='ignore'>}</span><span class='word'>和</span><span class='word'>\onlinecite</span><span class='ignore'>{</span><span class='word'>BUPT</span><span class='ignore'>_</span><span class='word'>Thesis</span><span class='ignore'>_</span><span class='word'>Format</span><span class='ignore'>_</span><span class='word'>2004</span><span class='ignore'>}</span><span class='word'>的</span><span class='word'>表</span><span class='word'>示</span><span class='word'>方</span><span class='word'>法</span><span class='ignore'>。</span><span class='cumsum'> [71]</span><br>
+<span class='cumsum'> [71]</span><br>
+<span class='envir'>\end</span><span class='envir'>{acknowledgement}</span><span class='cumsum'> [71]</span><br>
 </p></div>
 <div class='count'>
 <ul class='count'>
 <li class='header'>Included file: ./ackgmt.tex</li>
 <li>Encoding: utf8</li>
-<li>Sum count: 5</li>
-<li>Words in text: 5</li>
+<li>Sum count: 71</li>
+<li>Words in text: 61</li>
 <li>Words in headers: 0</li>
-<li>Words outside text (captions, etc.): 0</li>
+<li>Words outside text (captions, etc.): 10</li>
 <li>Number of headers: 0</li>
 <li>Number of floats/tables/figures: 0</li>
 <li>Number of math inlines: 0</li>
@@ -924,25 +981,28 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 <div class='sumcount'>
 <ul class='count'>
 <li class='header'>File(s) total: bare_thesis.tex</li>
-<li>Sum count: 10837</li>
-<li>Words in text: 10637</li>
-<li>Words in headers: 102</li>
-<li>Words outside text (captions, etc.): 77</li>
-<li>Number of headers: 21</li>
-<li>Number of floats/tables/figures: 10</li>
+<li>Sum count: 10747</li>
+<li>Words in text: 10485</li>
+<li>Words in headers: 166</li>
+<li>Words outside text (captions, etc.): 75</li>
+<li>Number of headers: 37</li>
+<li>Number of floats/tables/figures: 9</li>
 <li>Number of math inlines: 17</li>
 <li>Number of math displayed: 4</li>
-<li>Files: 8</li>
+<li>Files: 11</li>
 <li>Subcounts:</li>
 <span class='subcount'>
 <li class='fielddesc'>&nbsp; text+headers+captions (#headers/#floats/#inlines/#displayed)</li>
   <li>2+0+0 (0/0/0/0) File: bare_thesis.tex</li>
   <li>284+0+0 (0/0/0/0) Included file: ./metadata.tex</li>
-  <li>3119+45+12 (8/1/0/0) Included file: ./ch_intro.tex</li>
+  <li>3190+45+0 (8/0/0/0) Included file: ./ch_intro.tex</li>
   <li>6760+48+65 (11/9/0/0) Included file: ./ch_concln.tex</li>
+  <li>2+29+0 (8/0/0/0) Included file: ./ch_architecture.tex</li>
+  <li>2+9+0 (3/0/0/0) Included file: ./ch_module.tex</li>
+  <li>58+8+0 (3/0/0/0) Included file: ./ch_implement.tex</li>
+  <li>2+19+0 (3/0/0/0) Included file: ./ch_conclusion.tex</li>
   <li>115+8+0 (1/0/17/4) Included file: ./app_lhospital.tex</li>
-  <li>343+1+0 (1/0/0/0) Included file: ./bare_thesis.bbl</li>
-  <li>5+0+0 (0/0/0/0) Included file: ./ackgmt.tex</li>
+  <li>61+0+10 (0/0/0/0) Included file: ./ackgmt.tex</li>
   <li>9+0+0 (0/0/0/0) Included file: ./pubs.tex</li>
 </span>
 </ul>
@@ -950,7 +1010,7 @@ table.stat .sum {font-weight:bold; font-style:italic;}
 </div>
 
 <div class='error'><p>
-There were 3 error(s) reported!
+There were 8 error(s) reported!
 </p></div>
 </body>
 
