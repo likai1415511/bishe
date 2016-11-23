@@ -23,7 +23,21 @@
 - bare\_thesis.bib 参考文献列表
 - 论文的正文以ch\_开头,论文的附录以app\_开头
 
+
+#### 删除的代码备份
+```
+%% 每一章节的最后的代码（如果每一章节后面紧随参考文献，需要添加）
+%% 本章参考文献
+\ifx\usechapbib\empty
+\nocite{BSTcontrol}
+\setcounter{NAT@ctr}{0}
+\bibliographystyle{buptgraduatethesis}
+\bibliography{bare_thesis}
+\fi
+```
 #### 需要重画/修改的图
+- 需求分析还画图，现在用OVX替代的。
+- 架构图还没画图，现在用OVX替代的。
 - sdn.png该图在新一代网络架构.doc中有viso格式，需要转为pdf
 - of-switch.png该图在新一代网络架构.doc中有viso格式，需要转为pdf
 - match.png该图在新一代网络架构.doc中有viso格式，需要转为pdf
@@ -32,6 +46,7 @@
 - openstack.png该图在openstack社区Juno版本安装教程中有，需要重新画
 - br-tun.png需要visio绘制
 - neutron.png需要Visio绘制
+- workflow.png该图在小论文-中文版-v2.2.doc中有visio图，需要转pdf
 
 #### 现阶段存在的问题
 - 没有写国内外研究现状
