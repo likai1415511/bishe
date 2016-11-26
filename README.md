@@ -40,6 +40,10 @@
 - 需求分析还画图，现在用OVX替代的。
 - 整体架构图还没画图，现在用OVX替代的。
 - virtual-detail.png需要修改，添加各模块标识，具体见OVX纸质版资料
+- addr_virt.png需要重新绘制
+- PacketIn.png需要重新绘制
+- PacketOut.png需要重新绘制
+- FlowMod.png需要重新绘制
 - architecture.png在小论文-中文版-v2.2.doc中有visio图，需要修改，添加br-sdn网桥，添加Horizon前端展示
 - rabbitmq.png需要绘制
 - credentials.png需要重画，修改成中文，并且将Nova换做虚拟网络服务
