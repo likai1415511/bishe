@@ -51,7 +51,7 @@
 
 \begin{python} 
 topo = {
-	'subnet':'type:str', #str,虚拟网络的网络地址/位数，例如'192.168.0.0/24'
+	'subnet':'type:str', #虚拟网络的网络地址/位数，例如'192.168.0.0/24'
 	'switches':[
 		{
 			'dpid':'type:str'
@@ -182,14 +182,15 @@ class Test(object):
         \Require 链路的源、目的交换机信息、交换机上报的数据包，$srcswitch，dstswitch,packets$
         \Ensure 当前链路的可用带宽，$bandwidth$
         \Function {add\_flow}{$srcswitch，dstswitch$}
-        	\State $srcaction \gets [parser.OFPActionOutput(2),parser.OFPActionOutput(2)]$
-        	\State $dstaction \gets [ofproto.OFPPCONTROLLER]$
-        	\State $addFlowMod(srcswitch,srcaction)$
-        	\State $addFlowMod(dstswitch,dstaction)$
+        	\State $srcaction \gets [OFPActionOutput(2),OFPActionOutput(2)]$
+        	\State $dstaction \gets [OFPPCONTROLLER]$
+        	\State $macth \gets OFPMatch(src="0.0.0.0",dst="0.0.0.0")$
+        	\State $addFlowMod(srcswitch,match,srcaction)$
+        	\State $addFlowMod(dstswitch,match,dstaction)$
         \EndFunction
         \Function {simulatePacket}{$srcswitch$}
         	\State $pkt \gets packet.Packet()$
-        	\State $pkt.update(ipv4(src="0.0.0.0",dst="0.0.0.0"))$
+        	\State $pkt.update(ipv4(srcip="0.0.0.0",dstip="0.0.0.0"))$
         	\State $sendpacketout(pkt, srcswitch)$
         \EndFunction
          \Function {calculateBandwidth}{$packets$}
@@ -206,7 +207,7 @@ class Test(object):
 \begin{algorithm}[!htb]
     \caption{SDN控制器测量已用带宽}
     \begin{algorithmic}[1] %每行显示行号
-        \Require 链路的源、目的交换机信息，以及交换机的端口号，$src_switch，src_port,dst_switch,dst_port$
+        \Require 链路的源、目的交换机信息，以及交换机的端口号，$srcswitch，srcport,dstswitch,dstport$
         \Ensure 当前链路的已用，$bandwidth$
         \Function {get\_counters}{$srcswitch，srcport, dstswitch,dstport$}
         	\State $inputBytes \gets getCounters(srcswitch, inport=srcport)$
@@ -233,8 +234,82 @@ class Test(object):
   \label{fig:delay}
 \end{figure}
 
-具体实现如伪代码5所示。
+具体实现如伪代码5所示。主要包含流表下发、数据报模拟、时延计算模块，首先计算数据包从控制器到交换机的时延，需要为交换机下发流表，匹配到特定数据包以后，返回给控制器，而后控制器模拟出符合该匹配规则的数据包，发送个控制器，记录当前的时间，数据包到达交换机后，匹配上特定流表，数据包返还给控制器，至此控制器根究当前时间，利用时间差求解出控制器到交换机的时延。同理可以得到控制器->源交换机->目的交换机->控制器的时延，利用前面的公式即可得到链路的时延信息。
+
+\begin{algorithm}[!htb]
+    \caption{SDN控制器测量链路时延}
+    \begin{algorithmic}[1] %每行显示行号
+        \Require 链路的源、目的交换机信息，以及交换机的端口号，$srcswitch,srcport,dstswitch,dstport$
+        \Ensure 当前链路的时延，$delay$
+        \Function {add\_flow}{$srcswitch,dstswitch,srcaction,dstaction$}
+        	\State $macth \gets OFPMatch(srcmac="00:00:00:00:00:00",dstmac="00:00:00:00:00:00")$
+        	\State $addFlowMod(srcswitch,match,srcaction)$
+        	\State $addFlowMod(dstswitch,match,dstaction)$
+        \EndFunction
+        \Function {simulatePacket}{$switch$}
+        	\State $pkt \gets packet.Packet()$
+        	\State $pkt.update(mac(src="00:00:00:00:00:00",dst="00:00:00:00:00:00"))$
+        	\State $sendpacketout(pkt, switch)$
+        \EndFunction
+         \Function {calculateDelay}{$packets$}
+         	\State $t1 \gets time(controller->srcswitch->controller)$
+         	\State $t2 \gets time(controller->dstswitch->controller)$
+         	\State $t3 \gets time(controller->srcswitch->dstswitch->controller)$
+         	\State $delay \gets (t3-(t1+t2)/2)$
+         	\State \Return{$delay$}
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
 \subsection{定制化流表下发}
+定制化流表的下发，主要是根据用户定制化的链路信息，进行流表的下发工作，从而实现数据传输路径的定制化，即租户可以根据当前拓扑的负载情况，选择一条最优的链路，通过定制化流表的下发，实现数据的高效传输。输入的数据为Json格式的链路信息。具体数据如下。
+
+\begin{python} 
+link = {
+	'hosts':{
+		'src':{
+			'mac':'type:str'
+		},
+		'dst':{
+			'mac':'type:str'
+		}
+	}, #链路两端的主机信息，包括源主机的mac地址，目的主机的mac地址
+	'switches':[
+		{
+			'dpid':'type:str',
+			'in_port':'type:int',
+			'out_port':'type:int'
+		}
+	] #链路的交换机列表集合，每个元素每一个交换机数据，主要包括交换机的ID号、输入端口、输出端口、
+}
+\end{python}
+
+具体实现如伪代码6所示，针对用户发送的数据信息，分别对交换机下发定制化的流表。这里针对每个交换机，均要添加反向流表。从而实现主机的双向通信。
+
+\begin{algorithm}[!htb]
+    \caption{SDN定制化流表下发}
+    \begin{algorithmic}[1] %每行显示行号
+        \Require 定制化链路信息，$link$
+        \Function {add\_flow}{$switch,match,out_{-}port$}
+        	\State $action \gets [OFPActionOutput(out_{-}port)]$
+        	\State $addFlowMod(switch,match,action)$
+        	\State 
+        \EndFunction
+        \Function {add\_customflow}{$link$}
+        	\State $hosts \gets link['hosts']$
+        	\State $switches \gets link['switches']$
+        	\State $srcmac \gets hosts['src']['mac']$
+        	\State $dstmac \gets hosts['dst']['mac']$
+        	\For{$switch$ \textbf{in} $switches$}
+        		\State $match1 \gets OFPMatch(srcmac=srcmac,in_{-}port=switch['in_{-}port'])$
+        		\State $match2 \gets OFPMatch(srcmac=dstmac,in_{-}port=switch['out_{-}port'])$
+            	\State $add_{-}flow(switch,match1,switch['out_{-}port'])$
+            	\State $add_{-}flow(switch,match2,switch['in_{-}port'])$
+            \EndFor        	
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
 \section{GUI模块}
 \subsection{拓扑显示}
 \subsection{虚拟网络创建}
