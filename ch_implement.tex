@@ -113,34 +113,78 @@ topo = {
 发送方的具体实现代码如下：
 
 \begin{python} 
-def create():
-    pass
-class Test(object):
-    def __init__():
-        pass
-        Exception
-        sqrt(100)
-        a == 100
-        b = 10
-        c = "sssssss"
-        #nihao sdjslk
+#!/usr/bin/env python
+#coding=utf8
+import pika
+ 
+class Sender(object):
+    def __init__(self, host):
+        """
+        self.connnection:连接rabbitmq服务器
+        self.channel:定义队列
+        self.result:定义返回队列
+        """
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=host))
+        self.channel = self.connection.channel()
+        self.result = self.channel.queue_declare(exclusive=True)
+        self.callback_queue = self.result.method.queue
+        self.channel.basic_consume(self.on_response,no_ack=True,queue=self.callback_queue)
+ 
+    def on_response(self, ch, method, props, body):
+        self.response = "success"
+
+    def request(self, body):
+        self.response = None
+        self.channel.basic_publish(exchange='',
+                                   routing_key='test',
+                                   properties=pika.BasicProperties(
+                                         reply_to = self.callback_queue,
+                                         ),
+                                   body=body)
+        #接收返回的数据
+        while self.response is None:
+            self.connection.process_data_events()
+        return self.response
+ 
+sender = Sender('127.0.0.1')
+response = sender.request("request")
+print " [x] Requesting request"
+print " [.] Got %s"%response
+
 \end{python}  
 
 接受方具体实现代码如下：
 
-\begin{minted}[linenos=false,fontsize=\scriptsize,bgcolor=bg]{python} 
-def create():
-    pass
-class Test(object):
-    def __init__():
-        pass
-        Exception
-        sqrt(100)
-        a == 100
-        b = 10
-        c = "sssss"
-        #nihao sdjslk
-\end{minted}  
+\begin{python} 
+#!/usr/bin/env python
+#coding=utf8
+import pika
+
+class Receiver(object):
+  def __init__(self, host):
+    """
+    self.connnection:连接rabbitmq服务器
+    self.channel:定义队列
+    self.result:定义返回队列
+    """
+    self.connection =  pika.BlockingConnection(pika.ConnectionParameters(host=host))
+    self.channel = self.connection.channel()
+    self.channel.queue_declare(queue="test")
+    self.channel.basic_qos(prefetch_count=1)
+    self.channel.basic_consume(self.request, queue='test')
+
+  def request(self, ch, method, properties, body):
+    print "Receive %s"%body
+    response = "success"
+    ch.basic_publish(exchange='',
+            routing_key=properties.reply_to,
+                      body=response)
+    ch.basic_ack(delivery_tag = method.delivery_tag)
+
+receiver = Receiver("127.0.0.1")
+receiver.channel.start_consuming()
+\end{python}  
+
 \section{控制器模块}
 \subsection{可用带宽测量}
 本文基于包对算法，实现细粒度的链路可用带宽的测量，包对技术的核心思想是，连续发送两个背靠背的数据包，由交换机A发送至交换机B，根据两个数据包到达交换机B的时间差，用数据包的长度/时间差，得到精确的链路可用带宽。经测试证明，该方法在低带宽模式下，具有相当精确的测量值。
@@ -311,8 +355,27 @@ link = {
 \end{algorithm}
 
 \section{GUI模块}
-\subsection{拓扑显示}
-\subsection{虚拟网络创建}
-\subsection{带宽时延查询}
-\subsection{定制化流表下发}
+本模块主要实现前端可视化的操作，为租户提供操作的便捷性，本文中基于力导向图，实现了拓扑图的自动布局。该模式下，会对全网的整个拓扑图进行自动定位，节点与节点之间的互斥力，保证了节点的不可重合性。与此同时，拓扑元素可以实现可拖拽功能和手动定位功能，极大地提高了用户体验性。对于拓扑展示，本文主要实现了SDN物理网络、SDN虚拟网络的拓扑展示，在各自的拓扑图基础上，实现相应功能的具体操作和展示。具体如下。
+
+\subsection{物理网络显示图}
+物理网络的拓扑显示如图\ref{fig:physicalnet}所示，由图可以看出，租户可以进行物理网络的初始化，力导向图可以对拓扑中的元素进行自动布局。在次基础上，租户可以进行全局网络可用带宽的测量，测量数据会在相应的链路之上进行显示。通过对链路的点击选取，在输入框输入租户自由控制器的IP地址，可以实现vSDN网络的创建，创建的虚拟网路由租户自由的控制器进行集中管控。除此之外，租户以可以进行删除虚拟网络的操作。
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.7\textwidth]{logo/physicalnet.png}
+  \caption{物理网络拓扑显示图}
+  \label{fig:physicalnet}
+\end{figure}
+
+\subsection{虚拟网络显示图}
+虚拟网络的拓扑显示图如图\ref{fig:virtualnet}所示，该界面主要是实现对租户虚拟网络的拓扑展示，由图中可以看出租户可以进行虚拟网络图的初始化。现阶段，云平台提供的SDN控制器镜像，实现了已用带宽、时延的测量以及通过定制化流表进行选路的北向应用。未来租户可以自由开发SDN北向应用。测量的数据会在拓扑图的相应链路上进行显示，对于选路功能，租户通过点击链路的方式进行数据传输链路的定制化，后台通过解析链路信息，下发定制化流表，实现特定数据传输路径的设置。
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=0.7\textwidth]{logo/virtualnet.png}
+  \caption{虚拟网络拓扑显示图}
+  \label{fig:virtualnet}
+\end{figure}
+
 \section{本章小结}
+本章主要对系统功能的具体实现做了详细的介绍。首先论文介绍了网络虚拟化模块，对虚拟化和去虚拟化的流程做了详细的解读，分别对PacketIn、PacketOut、FlowMod的虚拟化和去虚拟化的流程进行了讲解。针对虚拟网络的创建，主要分4个步骤，在伪代码中做了详细介绍。通信模块主要介绍了基于RabbitMQ实现进程间通信的代码实现。对于控制器模块，本文对SDN模式下，可用带宽、已用带宽、时延定制化流表下发进行了详细的介绍，对测量功能的伪代码做了分析。最后在GUI模块中，介绍了物理网络、虚拟网络拓扑图的前端显示，以及在相应模块上实现的不同功能。
