@@ -4,13 +4,13 @@
 \subsection{需求分析}
 基于SDN的云平台多租户虚拟网定制化的实现，首先解决的是物理网络资源的虚拟化，其次是在虚拟化的基础上进行虚拟网络的带宽时延测量，随后根据测量的带宽时延进行链路的定制化，最后为方便用户的操作，完成前端Web界面的设计和实现。
 
-系统的整体需求如图\ref{fig:ovx}所示。
+系统的整体需求如图\ref{fig:demand}所示。
 
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=0.7\textwidth]{logo/ovx.png}
-  \caption{OVX网络虚拟化示意图}
-  \label{fig:ovx}
+  \caption{系统需求分析图}
+  \label{fig:demand}
 \end{figure}
 
 网络的虚拟化，需要实现资源隔离的同时，还要满足虚拟网络支持SDN模式，本文选用支持资源虚拟化的SDN控制器来完成该功能，通过对底层物理网络中下发的流表信息中，添加租户ID的相关信息，完成底层网络中租户的隔离工作。通过自身维护的物理网络与虚拟网络的映射关系图，为上层SDN交换机提供支持OpenFlow协议的虚拟网络，此时租户便可利用自身的SDN控制器完成对vSDN网络的集中管控。
@@ -31,13 +31,13 @@
 
 \section{系统架构设计}
 \subsection{系统总体设计图}
-系统主要由四个模块组成。分别为网络虚拟化模块、控制器模块、通信模块和GUI模块。总体的架构图如图\ref{fig:ovx}所示。
+系统主要由四个模块组成。分别为网络虚拟化模块、控制器模块、通信模块和GUI模块。总体的架构图如图\ref{fig:artic}所示。
 
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=0.7\textwidth]{logo/ovx.png}
-  \caption{OVX网络虚拟化示意图}
-  \label{fig:ovx}
+  \caption{系统整体架构图}
+  \label{fig:artic}
 \end{figure}
 
 如图中所示，架构底层主要包含支持OpenFlow协议的交换机，以及OpenStack内部的虚拟机资源，交换机既包含OpenStack内部的虚拟网桥，亦包含连接物理服务器之间的物理OpenFlow交换机。将这部分网络开放给租户，主要是为了便于租户实现对数据中心物理网络的可控性。租户可以根据链路时延、带宽定制化最优数据传输链路。支持网络虚拟化的SDN控制器，实现对底层网络和计算资源的集中控制。由该模块，可以创建相互隔离的租户虚拟网络，该虚拟网络支持SDN模式，租户可利用控制器实现对自由虚拟网络的集中管控。自主开发北向应用，实现特有的功能。

@@ -35,6 +35,10 @@
 \bibliography{bare_thesis}
 \fi
 ```
+
+脚注使用带圈数字的表示方法，此处为示例 1\footnote{测试脚注一} 和示例 2\footnote{测试脚注二}。
+参考文献可以使用\cite{BUPT_Thesis_Format_2014}和\onlinecite{BUPT_Thesis_Format_2004}的表示方法。
+
 #### 需要重画/修改的图
 - virtualnet.png重新截图，在win7下进行
 - 所有图的字体仿照图（ONF定义的SDN三层架构图）内的字体大小进行设置

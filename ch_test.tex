@@ -39,13 +39,13 @@
   \label{fig:create-virtual}
 \end{figure}
 
-创建生成的虚拟网络如图\ref{fig:virtualnet}所示，与上图之间是一一对应的关系。
+创建生成的虚拟网络如图\ref{fig:virtualnet-test}所示，与上图之间是一一对应的关系。
 
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=0.7\textwidth,height=0.50\textwidth]{logo/virtualnet.png}
   \caption{虚拟网络拓扑图}
-  \label{fig:virtualnet}
+  \label{fig:virtualnet-test}
 \end{figure}
 
 为了进行租户隔离性的测试，本文选取test-3虚拟机，让其分别与test-4和test-5进行ping测试，由图\ref{fig:subfig:a}可以看出，test-3与test-4属于同一个虚拟网络，可以进行正常通信。而对于test-3和test-5，由图\ref{fig:subfig:b}可以看出，两虚拟机不属于租户创建的同一个虚拟网络内，故不能直接进行通信。实验表明，租户创建的虚拟网络之间是相互隔离的，数据传输是安全可靠的。
@@ -72,16 +72,16 @@
   \label{fig:bandwidth}
 \end{figure}
 
-对于时延，本文仅仅实现了对虚拟网络的时延测量工作，通过为租户控制器开发的北向应用，实现虚拟网络的时延测量工作，测试结果如图\ref{fig:delay}所示，实验表明，租户控制器可以实现对虚拟网络时延数据的测量工作。
+对于时延，本文仅仅实现了对虚拟网络的时延测量工作，通过为租户控制器开发的北向应用，实现虚拟网络的时延测量工作，测试结果如图\ref{fig:virtualdelay}所示，实验表明，租户控制器可以实现对虚拟网络时延数据的测量工作。
 
 \begin{figure}[!htb]
   \centering
   \includegraphics[width=0.7\textwidth,height=0.50\textwidth]{logo/virtualdelay.png}
   \caption{虚拟网络时延测量图}
-  \label{fig:delay}
+  \label{fig:virtualdelay}
 \end{figure}
 \subsection{链路切换}
-对于租户创建的虚拟网络，本文实现了链路切换的功能，可以让租户实现对数据传输路径的定制化，如图\ref{fig:virtualnet}所示，host0和host1之间有存在两条传输路径。分别为链路1：host1-vswitch0-vswitch1-vswitch3-vswitch4-host0，和链路2：host1-vswitch0-vswitch1-vswitch2-vswitch3-vswitch4-host0，本文首先选取链路1进行数据传输，通过选路按键，进行定制化流表下发后，host0与host1进行ping测试，得到的带宽测量图如图\ref{fig:subfig-virtual:a}所示，由图中可以看出，该模式下，数据按照链路1进行数据传输。随后，选取链路2，并通过选路下发定制化流表，进而进行带宽测试，发现数据传输的通路已然变为链路2，具体如图\ref{fig:subfig-virtual:b}所示。实验表明，租户可以自定制数据转发路径，通过选路操作进行定制化流表的下发，从而实现对数据转发路径的控制操作。
+对于租户创建的虚拟网络，本文实现了链路切换的功能，可以让租户实现对数据传输路径的定制化，如图\ref{fig:virtualnet-test}所示，host0和host1之间有存在两条传输路径。分别为链路1：host1-vswitch0-vswitch1-vswitch3-vswitch4-host0，和链路2：host1-vswitch0-vswitch1-vswitch2-vswitch3-vswitch4-host0，本文首先选取链路1进行数据传输，通过选路按键，进行定制化流表下发后，host0与host1进行ping测试，得到的带宽测量图如图\ref{fig:subfig-virtual:a}所示，由图中可以看出，该模式下，数据按照链路1进行数据传输。随后，选取链路2，并通过选路下发定制化流表，进而进行带宽测试，发现数据传输的通路已然变为链路2，具体如图\ref{fig:subfig-virtual:b}所示。实验表明，租户可以自定制数据转发路径，通过选路操作进行定制化流表的下发，从而实现对数据转发路径的控制操作。
 
 \begin{figure}
  \centering
