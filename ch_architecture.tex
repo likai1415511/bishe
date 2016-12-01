@@ -8,7 +8,7 @@
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/ovx.png}
+  \includegraphics[width=0.7\textwidth]{logo/demand}
   \caption{系统需求分析图}
   \label{fig:demand}
 \end{figure}
@@ -35,7 +35,7 @@
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/ovx.png}
+  \includegraphics[width=0.7\textwidth]{logo/architecture-a}
   \caption{系统整体架构图}
   \label{fig:artic}
 \end{figure}
@@ -53,7 +53,7 @@
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/architecture.png}
+  \includegraphics[width=0.7\textwidth]{logo/architecture}
   \caption{系统详细架构图}
   \label{fig:architecture}
 \end{figure}
@@ -69,7 +69,7 @@
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/workflow.png}
+  \includegraphics[width=0.7\textwidth]{logo/workflow}
   \caption{系统详细流程图}
   \label{fig:workflow}
 \end{figure}
@@ -92,7 +92,7 @@
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/virtual-detail.png}
+  \includegraphics[width=0.7\textwidth]{logo/virtual-detail}
   \caption{网络虚拟化模块架构}
   \label{fig:virtual}
 \end{figure}
@@ -117,7 +117,7 @@
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/virtual-detail.png}
+  \includegraphics[width=0.7\textwidth]{logo/rabbitmq}
   \caption{通信模块架构图}
   \label{fig:rabbitmq}
 \end{figure}
@@ -135,11 +135,11 @@ SDN 的操作系统，控制器具有举足轻重的地位，它是连接底层�
 
 本研究中，我们提供了基于Ryu控制器的Linux镜像，租户可以基于次镜像进行控制器的创建，默认情况下控制器占用TCP的6633端口。租户只需要讲自己创建的虚拟网络指向自己的SDN控制器，即可实现自由控制器对虚拟网络的集中管控。租户可以根据自身需求进行控制器北向应用的相关开发工作。本文主要实现了链路的时延、带宽的测量，以及定制化流表的下发实验。
 
-本文选用的Ryu控制器，是由日本最大的电信服务提供商NTT主导幵发的基于Python语言的开源控制器，是一个基于组件的软件定义网络架构，是一个基于Apache协议的完全开源的SDN控制器，对于软件组件提供了良好的API接口，便于开发人员创建新的网络管理与控制中的应用，Ryu支持管理网络设备的多种网络协议，诸如：OpenFlow,Netconf,OF-config等，租户Ryu架构和主要组件如图\ref{fig:ryu}所示。OF-conf、Netconf等组件主要提供了对OpenFlow交换机的控制能力，Topology用于对SDN网络的拓扑进行管理,REST提供了上层的API接口。
+本文选用的Ryu控制器，是由日本最大的电信服务提供商NTT主导幵发的基于Python语言的开源控制器，是一个基于组件的软件定义网络架构，是一个基于Apache协议的完全开源的SDN控制器，对于软件组件提供了良好的API接口，便于开发人员创建新的网络管理与控制中的应用，Ryu支持管理网络设备的多种网络协议，诸如：OpenFlow,Netconf,OF-config等，租户Ryu架构和主要组件如图\ref{fig:ryu}所示。OF-conf、Netconf等组件主要提供了对OpenFlow交换机的控制能力，Topology用于对SDN网络的拓扑进行管理，REST提供了上层的API接口。
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/ryu.jpg}
+  \includegraphics[width=0.7\textwidth]{logo/ryu}
   \caption{Ryu架构图}
   \label{fig:ryu}
 \end{figure}
@@ -153,7 +153,7 @@ SDN 的操作系统，控制器具有举足轻重的地位，它是连接底层�
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/credentials.png}
+  \includegraphics[width=0.7\textwidth]{logo/credentials}
   \caption{请求认证图}
   \label{fig:credentials}
 \end{figure}

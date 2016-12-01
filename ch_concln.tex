@@ -1,5 +1,5 @@
 %%
-%% This is file `example/ch_concln.tex',
+%% This is file `example/ch_concln.tex'
 %% generated with the docstrip utility.
 %%
 %% The original source files were:
@@ -17,7 +17,7 @@ SDN是一种时下热门的网络架构，在这种网络架构中，网络的�
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/sdn.png}
+  \includegraphics[width=0.7\textwidth]{logo/sdn}
   \caption{ONF定义的SDN三层架构图}
   \label{fig:sdn}
 \end{figure}
@@ -41,7 +41,7 @@ OpenFlow协议是OpenFlow交换机和控制器之间交互信息的标准，也�
 \item Configuration：控制器设置或查询交换机上的配置信息。交换机仅需要应答查询消息。
 \item Modify-state：控制器管理交换机流表项和端口状态等。
 \item Read-state：控制器发送该消息来管理交换机状态。主要用于增加、删除或改变组/流表项和设置交换机端口属性。
-\item Packet-out：控制器通过交换机指定端口发出网包。控制器按指定交换机端口发送数据包,并且转发经由Packet-in消息接收到的包。Packet-out消息必须包含完整包或一个指向存储在交换机中的完整包的缓冲区ID。该消息包含一系列按指定顺序执行的行为,若为空则丢弃该包。 
+\item Packet-out：控制器通过交换机指定端口发出网包。控制器按指定交换机端口发送数据包，并且转发经由Packet-in消息接收到的包。Packet-out消息必须包含完整包或一个指向存储在交换机中的完整包的缓冲区ID。该消息包含一系列按指定顺序执行的行为，若为空则丢弃该包。 
 \item Barrier：控制器确保消息依赖满足，或接收完成操作的通知
 \end{itemize}
 \item Asynchronous消息
@@ -74,12 +74,12 @@ OpenFlow交换机负责数据转发功能，主要技术细节由流表(flow tab
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/of-switch.png}
+  \includegraphics[width=0.7\textwidth]{logo/of-switch}
   \caption{OpenFlow交换机结构}
   \label{fig:of-switch}
 \end{figure}
 
-OpenFlow的转发策略主要保存在流表中，每个流表中都有很多表项(FlowEntry),这些表项可由外部控制器通过OpenFlow协议来写入、更新和删除。对于OpenFlow\ v1.3,每一个流表项都由匹配域、优先级、计数器、指令、超时以及Cookie组成，如表\ref{table:flow}所示。当一个流进入交换机后，交换机会选择匹配的流表中优先级最高的一个执行相应的指令并更新计数器、超时等项。
+OpenFlow的转发策略主要保存在流表中，每个流表中都有很多表项(FlowEntry)，这些表项可由外部控制器通过OpenFlow协议来写入、更新和删除。对于OpenFlow\ v1.3，每一个流表项都由匹配域、优先级、计数器、指令、超时以及Cookie组成，如表\ref{table:flow}所示。当一个流进入交换机后，交换机会选择匹配的流表中优先级最高的一个执行相应的指令并更新计数器、超时等项。
 
 \newcommand{\enter}[2][c]{%
   \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
@@ -111,7 +111,7 @@ OpenFlow的转发策略主要保存在流表中，每个流表中都有很多表
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/match.png}
+  \includegraphics[width=0.7\textwidth]{logo/match}
   \caption{数据包匹配流程图}
   \label{fig:match}
 \end{figure}
@@ -129,13 +129,13 @@ SDN北向接口是通过控制器向上层业务应用开放的接口，其目�
 
 控制器负责整个SDN网络的集中化控制，对于把握全网置资源视图、改善网络资源交付都具有非常重要的作用。但控制能力的集中化，也意味着控制器局的安全性和性能成为全网的瓶颈;另外，单一的控制器也无法应对跨多个地域的SND网络问题，需要多个SDN控制器组成的分布式集群，以避免单一的控制器节点在可靠性、扩展性、性能方面的问题。
 \section{网络虚拟化技术概述}
-互联网不断地向前发展,必然会出现越来越多的应用和服务。然而现有的网络结构比较僵化,而且可扩展性很差,随着网络的发展,这些缺点日益突出,但是研发和部署新型的网络体系架构比较因难,难以更新,而且由于各个设备生产商自身利益的考虑,更加加剧了这种困难。在这种背景下,网络虚拟化成为当前互联网面向未来网络体系架构过渡的一种有效解决方案,同时网络虚拟化也是未来网络体系架构应该具备的关键特性之一。
+互联网不断地向前发展，必然会出现越来越多的应用和服务。然而现有的网络结构比较僵化，而且可扩展性很差，随着网络的发展，这些缺点日益突出，但是研发和部署新型的网络体系架构比较因难，难以更新，而且由于各个设备生产商自身利益的考虑，更加加剧了这种困难。在这种背景下，网络虚拟化成为当前互联网面向未来网络体系架构过渡的一种有效解决方案，同时网络虚拟化也是未来网络体系架构应该具备的关键特性之一。
 
-网络虚拟化技术\cite{Virtual-1}，通过对共用的底层网络进行抽象并提供统一的可编程接口，将多个相互隔离且具有不同拓扑的虚拟网络映射到共用的基础设施上，为用户提供差异化服务。网络虚拟化允许多个租户占据相同的网络基础设施，每个租户会有一种错觉，认为可以对整个网络进行完整的处理.传统的网络虚拟化配置和操作都比较复杂,难以管理。原因就在于路由器和交换机变得越来越复杂，其配置操作的代价越来越大。而SDN的出现为网络虚拟化开启了另外一条道路，在SDN网络中，集中控制的优势使得对网络的管理变得灵活和高效。基于SDN的网络虚拟化是SDN思想的典型应用。本文选用OVX实现网络虚拟化模块，OVX通过给每个租户提供访问一个虚拟网络拓扑和一个完整的网络头空间来达到这样的目标，前者允许租户自定义拓扑结构,而后者保证功能性和流量隔离，即使是在不同的租户选择重叠的寻址方案。OVX用作控制信道内的一个代理，呈现OpenFlow网络给租户，同时经由南向的OpenFlow接口控制底层的物理基础设施。通过暴露OpenFlow网络给租户，OVX允许租户使用自己的网络控制器控制自有的虚拟网络资源。换句话说，OVX基于同一底层物理网络创建多个vSDN网络，并且vSDN网络之间是相互隔离的，保证了租户虚拟网络的安全性。这样的方法会产生两个后果:允许OVX呈现支持OpenFlow的可编程虚拟网络，租户可以使用自己的NOS控制虚拟网络，使OVX是透明的——从底层网络的角度，OVX的表现为一个控制器，从租户的角度上看，OVX作为网络中具有OpenFlow能力的交换机集合\cite{OVX-2}。OVX具体的架构图如图\ref{fig:ovx}所示。
+网络虚拟化技术\cite{Virtual-1}，通过对共用的底层网络进行抽象并提供统一的可编程接口，将多个相互隔离且具有不同拓扑的虚拟网络映射到共用的基础设施上，为用户提供差异化服务。网络虚拟化允许多个租户占据相同的网络基础设施，每个租户会有一种错觉，认为可以对整个网络进行完整的处理。传统的网络虚拟化配置和操作都比较复杂，难以管理。原因就在于路由器和交换机变得越来越复杂，其配置操作的代价越来越大。而SDN的出现为网络虚拟化开启了另外一条道路，在SDN网络中，集中控制的优势使得对网络的管理变得灵活和高效。基于SDN的网络虚拟化是SDN思想的典型应用。本文选用OVX实现网络虚拟化模块，OVX通过给每个租户提供访问一个虚拟网络拓扑和一个完整的网络头空间来达到这样的目标，前者允许租户自定义拓扑结构，而后者保证功能性和流量隔离，即使是在不同的租户选择重叠的寻址方案。OVX用作控制信道内的一个代理，呈现OpenFlow网络给租户，同时经由南向的OpenFlow接口控制底层的物理基础设施。通过暴露OpenFlow网络给租户，OVX允许租户使用自己的网络控制器控制自有的虚拟网络资源。换句话说，OVX基于同一底层物理网络创建多个vSDN网络，并且vSDN网络之间是相互隔离的，保证了租户虚拟网络的安全性。这样的方法会产生两个后果:允许OVX呈现支持OpenFlow的可编程虚拟网络，租户可以使用自己的NOS控制虚拟网络，使OVX是透明的——从底层网络的角度，OVX的表现为一个控制器，从租户的角度上看，OVX作为网络中具有OpenFlow能力的交换机集合\cite{OVX-2}。OVX具体的架构图如图\ref{fig:ovx}所示。
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/ovx.png}
+  \includegraphics[width=0.7\textwidth]{logo/ovx}
   \caption{OVX网络虚拟化示意图}
   \label{fig:ovx}
 \end{figure}
@@ -149,7 +149,7 @@ OpenStack\ Juno版本的构架由9个服务组成，分别是Dashboard、Compute
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/openstack.png}
+  \includegraphics[width=0.7\textwidth]{logo/openstack}
   \caption{OpenStack概念架构图}
   \label{fig:openstack}
 \end{figure}
@@ -174,7 +174,7 @@ Neutron是OpenStack项目中负责提供网络服务的组件，它基于软件�
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/neutron.png}
+  \includegraphics[width=0.7\textwidth]{logo/neutron}
   \caption{Neutron组件GRE模式架构图}
   \label{fig:neutron}
 \end{figure}
@@ -190,7 +190,7 @@ Neutron是OpenStack项目中负责提供网络服务的组件，它基于软件�
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/br-tun.png}
+  \includegraphics[width=0.7\textwidth]{logo/br-tun}
   \caption{br-tun网桥转发规则}
   \label{fig:br-tun}
 \end{figure}

@@ -6,7 +6,7 @@
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/addr_virt.png}
+  \includegraphics[width=0.7\textwidth]{logo/addr_virt}
   \caption{地址虚拟化过程}
   \label{fig:addr-vir}
 \end{figure}
@@ -20,11 +20,11 @@
 \item 虚拟化平台下发与PhysicalIP匹配的FlowMod消息。执行的OFAction为重写回VirtualIP。
 \end{enumerate}
 
-转换的过程主要对PacketIn、PacketOut和FlowMod消息的虚拟化与去虚拟化。针对PacketIn消息，由于该消息是来自南向物理交换机，所以消息的处理过程为虚拟化过程，具体的虚拟化过程如图\ref{fig:packetin}所示。首先判断该数据报是否来自边缘侧交换机，如果是，直接查看租户ID和虚拟交换机，如果不是，通过对数据域的匹配，获取租户的ID和虚拟交换机,进而检查该租户的控制器是否以建立连接，如果建立连接，直接将消息发送给租户控制器，否则丢弃。针对L3层的数据报，首先检查PhysicalIP的合理性，在合理的情况下，查看虚拟IP和交换机，并将数据包中的IP地址进行重写。
+转换的过程主要对PacketIn、PacketOut和FlowMod消息的虚拟化与去虚拟化。针对PacketIn消息，由于该消息是来自南向物理交换机，所以消息的处理过程为虚拟化过程，具体的虚拟化过程如图\ref{fig:packetin}所示。首先判断该数据报是否来自边缘侧交换机，如果是，直接查看租户ID和虚拟交换机，如果不是，通过对数据域的匹配，获取租户的ID和虚拟交换机，进而检查该租户的控制器是否以建立连接，如果建立连接，直接将消息发送给租户控制器，否则丢弃。针对L3层的数据报，首先检查PhysicalIP的合理性，在合理的情况下，查看虚拟IP和交换机，并将数据包中的IP地址进行重写。
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/PacketIn.png}
+  \includegraphics[width=0.7\textwidth]{logo/PacketIn}
   \caption{PacketIn虚拟化}
   \label{fig:packetin}
 \end{figure}
@@ -33,7 +33,7 @@
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/PacketOut.png}
+  \includegraphics[width=0.7\textwidth]{logo/PacketOut}
   \caption{PacketOut去虚拟化}
   \label{fig:packetout}
 \end{figure}
@@ -42,7 +42,7 @@
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/FlowMod.png}
+  \includegraphics[width=0.7\textwidth]{logo/FlowMod}
   \caption{FlowMod虚拟化}
   \label{fig:flowmod}
 \end{figure}
@@ -194,7 +194,7 @@ receiver.channel.start_consuming()
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/spaceband.png}
+  \includegraphics[width=0.7\textwidth]{logo/spaceband}
   \caption{链路可用带宽测量模型}
   \label{fig:spaceband}
 \end{figure}
@@ -274,7 +274,7 @@ receiver.channel.start_consuming()
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{logo/delay.png}
+  \includegraphics[width=0.7\textwidth]{logo/delay}
   \caption{链路时延测量模型}
   \label{fig:delay}
 \end{figure}
