@@ -16,8 +16,8 @@
 \studentid{xxxxxxxxx}
 
 %% 论文题目
-\ctitle{xxxxxxxxxxxxxxx}
-\etitle{Example of BUPT Graduate Thesis \LaTeXe{} Template}
+\ctitle{基于SDN的云平台多租户虚拟网络定制化的研究与实现}
+\etitle{Research and Implementation of Multi-tenant Virtual Network Customization on Cloud Platform Based on SDN}
 
 %% 申请学位
 \cdegree{工学硕士}
@@ -39,27 +39,31 @@
 \cdate{2015年12月26日}
 
 %% 中文摘要
-\cabstract{%
-  中、英文摘要位于声明的次页，摘要应简明表达学位论文的内容要点，体现研究工作的核心思想。
-  重点说明本项科研的目的和意义、研究方法、研究成果、结论，注意突出具有创新性的成果和新见解的部分。
+\cabstract{
+SDN通过集中式控制器，实现了控制与转发分离的可编程网络结构。现有云数据中心网络引入SDN网络架构，利用其集中式控制的优势以及可编程思想，增强了数据中心的可扩展性。OpenStack作为业界广为应用的开源云计算管理项目，可提供计算、存储和网络等云计算资源的管理服务。然而，随着各类业务的蓬勃发展，OpenStack云平台对SDN的支持不能满足用户多样性的业务需求，单一控制的云数据中心网络无法实现租户对自有网络的定制化操控，与此同时OpenStack云平台无法实现服务器之间SDN网络的集中管控。
 
-  关键词是为文献标引工作而从论文中选取出来的、用以表示全文主题内容信息的术语。
-  关键词排列在摘要内容的左下方，具体关键词之间以均匀间隔分开排列，无需其它符号。
+基于此，本文提出了基于SDN的云平台多租户虚拟化网络的定制化机制。首先对服务器之间的数据中心网络实现集中管控，通过与OpenStack之间的协调通信，实现了外围数据中心网路与OpenStack内部租户计算、网络资源的统一管理，在此基础上，通过为每个租户提供一个可访问的虚拟网络拓扑和一
+个完整的网络头空间，实现了租户云数据中心网络的虚拟化，虚拟化的SDN网络由租户自有的SDN控制器进行集中管控，租户可以利用自有的控制器进行定制化操作。
+
+本文在虚拟SDN网络的基础之上，为租户提供了控制器镜像，本文为该控制器开发了北向应用，实现了租户虚拟网络链路带宽、时延的测量。租户可以根据当前链路的负载，通过定制化流表的下发，实现SDN模式下的数据传输链路选取。从而加快数据传输效率，提高带宽利用率。
+
+实验表明，租户可以在不降低当前云平台性能的前提下，实现对数据中心网络的定制化操作，真正意义上实现了对数据中心自有网络的集中管控。
 }
 
 %% 中文关键词，关键词之间用 \kwsep 分割
-\ckeywords{\TeX \kwsep \LaTeX \kwsep xeCJK \kwsep 模板 \kwsep 排版 \kwsep 论文}
+\ckeywords{\kwsep SDN \kwsep OpenStack \kwsep 云数据中心网络 \kwsep 网络虚拟化 \kwsep 网络定制化}
 
 %% 英文摘要
 \eabstract{%
-  The Chinese and English abstract should appear after the declaration page.
-  The abstract should present the core of the research work, especially the purpose and importance of the research, the method adopted, the results, and the conclusion.
+SDN is a programmable network structure which achieves separation of control and forwarding via a centralized controller. Existing cloud data center network introduces SDN architecture, and enhances data center scalability via advantages of programmable thinking and centralized control. OpenStack is a free and open-source software platform for cloud computing, which provides computing, storage and network management services for cloud computing resources. However, with rapid development of various types of services, the current SDN data center based on OpenStack cannot satisfy multiple users’ service requirements. Cloud data center network with single control node cannot achieve tenants’ customization of their own network. At the same time, OpenStack cloud platform can not achieve centralized control for SDN network between physical servers.
 
-  Key words are terms selected for documentation indexing, which should present the main contributions of the thesis.
-  Key words are aligned at the bottom left side of the abstract content.
-  Key words should be seperated by spaces but not any other symbols.
+Based on this, a SDN-based cloud platform multi-tenant virtual network customization mechanism is presented in this paper. Firstly, achieve centralized control for SDN network between physical servers. Through the coordination of communication with OpenStack, the unified management between cloud data center network and compute resources in OpenStack are realized. On this basis, by giving each tenant access to a virtualized network topology and a full network header space, realize the tenant cloud data center network virtualization. The virtual SDN network is controlled by tenant's own controller. Tenants can use their own controller for customized operation.
+
+On the basis of the virtual SDN network, a controller image is provided for tenant in this paper. This paper develops north applications for this controller, and realizes the measurement of link bandwidth and delay. According to the current link load, tenant can choose the data transmission link through sending the customized flow table. So as to speed up the data transmission efficiency and improve the bandwidth utilization.
+
+Experiments show that tenants can achieve the customized operation in data center network, in the premise of not reducing the performance of the current cloud platform. Realize the centralized control of their own data center network.
 }
 
 %% 英文关键词，也用 \kwsep 分割
 \ekeywords{%
-  \TeX \kwsep \LaTeX \kwsep xeCJK \kwsep template \kwsep typesetting \kwsep thesis}
+  \kwsep SDN \kwsep OpenStack \kwsep Cloud data center network \kwsep Network virtualization \kwsep Network customization}
