@@ -113,7 +113,8 @@ topo = {
 
 发送方的具体实现代码如下所示：
 
-\begin{python} 
+%\begin{python} 
+\begin{minted}[linenos=false,fontsize=\scriptsize,bgcolor=bg]{python} 
 #!/usr/bin/env python
 #coding=utf8
 import pika
@@ -152,11 +153,13 @@ response = sender.request("request")
 print " [x] Requesting request"
 print " [.] Got %s"%response
 
-\end{python}  
+\end{minted}
+%\end{python}  
 
 接收方具体实现代码如下：
 
-\begin{python} 
+%\begin{python} 
+\begin{minted}[linenos=false,fontsize=\scriptsize,bgcolor=bg]{python} 
 #!/usr/bin/env python
 #coding=utf8
 import pika
@@ -171,6 +174,9 @@ class Receiver(object):
     self.connection =  pika.BlockingConnection(pika.ConnectionParameters(host=host))
     self.channel = self.connection.channel()
     self.channel.queue_declare(queue="test")
+\end{minted}
+
+\begin{minted}[linenos=false,fontsize=\scriptsize,bgcolor=bg]{python} 
     self.channel.basic_qos(prefetch_count=1)
     self.channel.basic_consume(self.request, queue='test')
 
@@ -184,7 +190,9 @@ class Receiver(object):
 
 receiver = Receiver("127.0.0.1")
 receiver.channel.start_consuming()
-\end{python}  
+
+\end{minted}
+%\end{python}  
 
 \section{控制器模块}
 \subsection{可用带宽测量}
