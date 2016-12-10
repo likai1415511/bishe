@@ -2,7 +2,7 @@
 基于SDN的云平台多租户虚拟网络定制化研究的实现，需要完成系统的搭建，实现系统各模块功能。系统架构中，网路虚拟化模块，需要完成虚拟网络的创建、删除工作；通信模块实现进程间的异步通信；控制器模块主要进行带宽、时延的测量工作，以及通过定制化流表的下发完成链路的选取；GUI模块主要实现拓扑信息、虚拟网络创建、测量数据展示的功能。各模块之间协同工作，实现基于SDN的云平台多租户虚拟网络的定制化。
 \section{网络虚拟化模块}
 \subsection{虚拟化和去虚拟化流程}
-网络虚拟化模块，主要包含虚拟化和去虚拟化两个方面，如第三章图\ref{fig:virtual}所示。主要涉及到交换机的转换、OpenFlow字段转换（包括Cookie、Buffer\ ID, XID）、地址的虚拟化。其中对于交换机的转换，包括针对租户控制器发送的南向消息，进行去虚拟化，由VirtualSwitch映射成PhysicalSwitch；针对底层物理网络的北向消息，进行虚拟化操作，由PhysicalSwitch映射成VirtualSwitch。地址的虚拟化，是针对主机创建VirtualIP和PhysicalIP，以避免租户流量之间存在地址空间冲突，图\ref{fig:addr-vir}描述了地址虚拟化的具体过程。
+本文的网络虚拟化模块，主要包含虚拟化和去虚拟化两个方面，如第三章图\ref{fig:virtual}所示。主要涉及到物理交换机和虚拟交换机的转换、OpenFlow字段转换（包括Buffer ID、Cookie等）、虚拟机IP地址的虚拟化。其中对于交换机的映射，主要包括两个方面，分别为：针对租户SDN控制器向交换机发送的南向消息，进行去虚拟化，完成VirtualSwitch向PhysicalSwitch的转换；针对底层物理网络的北向消息，进行虚拟化操作，由PhysicalSwitch映射成VirtualSwitch。地址的虚拟化，是针对主机创建VirtualIP和PhysicalIP，以避免租户流量之间存在地址空间冲突，图\ref{fig:addr-vir}描述了网络虚拟化模块中地址虚拟化的具体过程。
 
 \begin{figure}[!htb]
   \centering
@@ -11,13 +11,13 @@
   \label{fig:addr-vir}
 \end{figure}
 
-虚拟化流程如下：
+网络虚拟化主要流程如下：
 \begin{enumerate}[a)]
-\item PacketIn消息携带VirtualIP，未经修改直接发送给租户控制器
-\item 相应的FlowMod匹配VirtualIP，执行的OFAction为将值修改为PhysicalIP。
-\item 虚拟链路通过核心侧交换机psw2映射回两跳路径。
-\item 目的地边缘的PacketIn与核心网络中的转换行为一致。
-\item 虚拟化平台下发与PhysicalIP匹配的FlowMod消息。执行的OFAction为重写回VirtualIP。
+\item 交换机中的PacketIn消息携带VirtualIP，未经修改直接发送给租户控制器
+\item 控制器下发FlowMod流表，将VirtualIP修改为PhysicalIP。
+\item 虚拟链路映射，将虚拟链路映射至底层物理网络，由图中可以看出，虚拟链路对应底层网络的两条链路。
+\item 对于边缘侧交换机，该交换机对PacketIn消息的处理过程与核心侧的交换机一致。
+\item 虚拟化平台下发FlowMod消息，该消息与与PhysicalIP相匹配。执行的指令为将PhysicalIP修改为VirtualIP。
 \end{enumerate}
 
 转换的过程主要对PacketIn、PacketOut和FlowMod消息的虚拟化与去虚拟化。针对PacketIn消息，由于该消息是来自南向物理交换机，所以消息的处理过程为虚拟化过程，具体的虚拟化过程如图\ref{fig:packetin}所示。首先判断该数据报是否来自边缘侧交换机，如果是，直接查看租户ID和虚拟交换机，如果不是，通过对数据域的匹配，获取租户的ID和虚拟交换机，进而检查该租户的控制器是否以建立连接，如果建立连接，直接将消息发送给租户控制器，否则丢弃。针对L3层的数据报，首先检查PhysicalIP的合理性，在合理的情况下，查看虚拟IP和交换机，并将数据包中的IP地址进行重写。
