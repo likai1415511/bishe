@@ -1,105 +1,59 @@
-%%
-%% This is file `example/bare_thesis.tex',
-%% generated with the docstrip utility.
-%%
-%% The original source files were:
-%%
-%% install/buptgraduatethesis.dtx  (with options: `bare-thesis')
-%% 
-%% This file is a part of the example of BUPTGraduateThesis.
-%% 
-
-%%盲审版
-%\documentclass[degree=master,classlevel=open,mathfont=mathptmx,dedication=false,chapbib=false,finish=peerreview,driver=xetex]{buptgraduatethesis}
-
-%%打印版
-\documentclass[degree=master,classlevel=open,mathfont=mathptmx,dedication=false,chapbib=false,finish=print,driver=xetex]{buptgraduatethesis}
-
-%% 自定义导言区
-%% 在这里添加你需要的宏包、自定义命令、环境等
-%% \usepackage{...}
-%% \DeclareMathOperator{\CT}{H}
-%% \DeclareMathOperator{\Cov}{Cov}
-\usepackage{listings}
-\usepackage{color}
-\usepackage{graphicx}
-\usepackage{pythonhighlight}
-\usepackage{minted}
-
-\usepackage{algorithm}
-\usepackage{algorithmicx}
-\usepackage{algpseudocode}
-%\usepackage{amsmath}
-
-\definecolor{bg}{rgb}{0.95,0.95,0.95}
-\floatname{algorithm}{伪代码}
-\renewcommand{\algorithmicrequire}{\textbf{输入:}}
-\renewcommand{\algorithmicensure}{\textbf{输出:}}
-
-\def\BUPTThesis{\textsc{BUPT}\-\textsc{Thesis}}
-
-%% 在这里添加图片文件搜索目录
-\graphicspath{{../}}
-%% 自定义导言区结束
-
-%% 加载缩略语定义
-\input{metadata}
-
-\loadglsentries{acronyms}
-
-%% 攻读学位期间发表论文
-%% 用 \newcite{<suffix>}{<caption>} 声明不同的论文类型(例如: 期刊论文、会议论文等)。每一个类型的对应的 .bib 文件用 \bibliography<suffix> 命令加载，用 \nocite<suffix> 命令引用。具体请参考 pubs.tex 中的示例
-\newcite{conf}{会议论文}
-\newcite{jrnl}{期刊论文}
-\newcite{patent}{专利}
-
-\begin{document}
-%% 声明前置部分
-\makefrontmatter
-
-%% 生成主要符号对照表
-%\input{notations}
-
-%% 主体部分
-\mainmatter
-%% 用\include{}命令引用各章.tex文件
-\include{ch_intro}
-\include{ch_concln}
-\include{ch_architecture}
-\include{ch_implement}
-\include{ch_test}
-\include{ch_conclusion}
-
-%% 附录部分
-
-% % 如果有两个或两个以上的附录, 使用appendix环境
-% \begin{appendix}
-%   \input{app_lhospital}
-%   % 自动抽取生成缩略语表作为附录A
-%   \tableofacronyms
-%   % 用\input{}添加其他的附录
-%   % \input{...}
-% \end{appendix}
-
-%% 如果只有一个附录, 使用appendix*环境
-\begin{appendix*}
-  % 自动抽取生成缩略语表作为附录A
-  \tableofacronyms
-\end{appendix*}
-
-\ifx\usechapbib\undefined
-\bibliographystyle{buptgraduatethesis}
-\bibliography{bare_thesis}
-\fi
-
-\backmatter
-%% 致谢
-\ifx\ispeerreview\undefined
-\input{ackgmt}
-\fi
-
-%% 在读期间论文发表情况
-\input{pubs}
-
-\newpage
-\end{document}
+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

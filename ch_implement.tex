@@ -1,396 +1,532 @@
-\chapter{系统功能的具体实现}
-基于SDN的云平台多租户虚拟网络定制化研究的实现，需要完成系统的搭建，实现系统各模块功能。系统架构中，网路虚拟化模块，需要完成虚拟网络的创建、删除工作；通信模块实现进程间的异步通信；控制器模块主要进行带宽、时延的测量工作，以及通过定制化流表的下发完成链路的选取；GUI模块主要实现拓扑信息、虚拟网络创建、测量数据展示的功能。各模块之间协同工作，实现基于SDN的云平台多租户虚拟网络的定制化。
-\section{网络虚拟化模块}
-\subsection{虚拟化和去虚拟化流程}
-本文的网络虚拟化模块，主要包含虚拟化和去虚拟化两个方面，如第三章图\ref{fig:virtual}所示。主要涉及到物理交换机和虚拟交换机的转换、OpenFlow字段转换（包括Buffer ID、Cookie等）、虚拟机IP地址的虚拟化。其中对于交换机的映射，主要包括两个方面，分别为：针对租户SDN控制器向交换机发送的南向消息，进行去虚拟化，完成VirtualSwitch向PhysicalSwitch的转换；针对底层物理网络的北向消息，进行虚拟化操作，由PhysicalSwitch映射成VirtualSwitch。地址的虚拟化，是针对主机创建VirtualIP和PhysicalIP，以避免租户流量之间存在地址空间冲突，图\ref{fig:addr-vir}描述了网络虚拟化模块中地址虚拟化的具体过程。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.7\textwidth]{logo/addr_virt}
-  \caption{地址虚拟化过程}
-  \label{fig:addr-vir}
-\end{figure}
-
-网络虚拟化主要流程如下：
-\begin{enumerate}[a)]
-\item 交换机中的PacketIn消息携带VirtualIP，未经修改直接发送给租户控制器
-\item 控制器下发FlowMod流表，将VirtualIP修改为PhysicalIP。
-\item 虚拟链路映射，将虚拟链路映射至底层物理网络，由图中可以看出，虚拟链路对应底层网络的两条链路。
-\item 对于边缘侧交换机，该交换机对PacketIn消息的处理过程与核心侧的交换机一致。
-\item 虚拟化平台下发FlowMod消息，该消息与与PhysicalIP相匹配。执行的指令为将PhysicalIP修改为VirtualIP。
-\end{enumerate}
-
-转换的过程主要对PacketIn、PacketOut和FlowMod消息的虚拟化与去虚拟化。针对PacketIn消息，由于该消息是来自南向物理交换机，所以消息的处理过程为虚拟化过程，具体的虚拟化过程如图\ref{fig:packetin}所示。首先判断该数据报是否来自边缘侧交换机，如果是，直接查看租户ID和虚拟交换机，如果不是，通过对数据域的匹配，获取租户的ID和虚拟交换机，进而检查该租户的控制器是否以建立连接，如果建立连接，直接将消息发送给租户控制器，否则丢弃。针对L3层的数据报，首先检查PhysicalIP的合理性，在合理的情况下，查看虚拟IP和交换机，并将数据包中的IP地址进行重写。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.7\textwidth]{logo/PacketIn}
-  \caption{PacketIn虚拟化}
-  \label{fig:packetin}
-\end{figure}
-
-针对PacketOut消息，由于该消息是由北向租户控制器下发给交换机，所以该消息的处理过程是去虚拟化过程，具体的去虚拟化过程如图\ref{fig:packetout}所示，首先检查bufferID的合理性，进而从data中提取匹配域，重写端口以及bufferID等信息，将action中的地址，修改为PhysicalIP。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.7\textwidth]{logo/PacketOut}
-  \caption{PacketOut去虚拟化}
-  \label{fig:packetout}
-\end{figure}
-
-针对FlowMod消息，由于该消息是由北向租户控制器发送给交换机，因此，该过程也是一个去虚拟化的过程。首先需要判断该条流是来自入口交换机、出口交换机，还是核心交换机，针对不同的情况进行具体的操作。如果该消息来自出口交换机或者核心交换机，需要将匹配域重写为PhysicalIP，然后，依次将执行的动作重写为物理地址，然后将消息下发给物理交换机，具体如图\ref{fig:flowmod}所示。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.7\textwidth]{logo/FlowMod}
-  \caption{FlowMod虚拟化}
-  \label{fig:flowmod}
-\end{figure}
-\subsection{虚拟网络创建}
-针对虚拟网络的创建，本文为虚拟化平台封装了API接口\emph{createCustomNetwork}，该接口的输入数据为Json格式的拓扑信息，具体信息格式如下图所示，由图中可以看出，主要由subnet，switches，hosts，ctrls，method，routing组成，subnet描述了虚拟网络的网络地址信息，不同的租户可以共用相同的网络地址；hosts和switches描述了底层网路的交换机和主机信息，虚拟网络映射到相应的物理组件上；ctrls描述了虚拟网路的控制器信息，创建的虚拟网络由该控制器进行集中管控；method为创建虚拟网络的方式，现有模式下有两种方式，其一是虚拟网络与物理网络的节点是一一对应的，其二是big\ switch的创建，即租户的单个虚拟交换机映射到底层的多个物理交换机，实现物理网络侧多对一的映射，本文虚拟网络的创建默认采用一一对应的映射模型；routing描述了虚拟网络的路由算法，现阶段网络虚拟化平台仅仅提供了spf路由算法。租户根据虚拟化平台管控的物理拓扑信息，选取出进行虚拟网络创建的主机和交换机，配置好虚拟网络的子网信息和控制器信息，按照规定的格式发送至虚拟化平台进行虚拟网络的创建。
-
-\begin{python} 
-topo = {
-	'subnet':'type:str', #虚拟网络的网络地址/位数，例如'192.168.0.0/24'
-	'switches':[
-		{
-			'dpid':'type:str'
-		}
-	], #物理交换机列表，列表中的每个交换机由dpid标识
-	'hosts':[
-		{
-			'mac':'type:str',
-			'port':'type:int',
-			'dpid':'type:str'
-		}
-	], #物理主机列表，列表中每条主机信息为dict，存储主机的mac地址、连接物理交换机的dpid和port
-	'ctrls':'type:str', #租户控制器信息，包括租户控制器所在IP以及占用的TCP端口，例如'tcp:10.0.0.2:6633'
-	'method':'type:str', #请求的函数方法名，
-	'routing':{
-		'algorithm':'type:str'
-	}, #路由算法，例如'spf'
-}
-\end{python}
-
-进行虚拟网络创建的伪代码如伪代码\ref{code-1}所示，主要分4个步骤完成，首先基于租户控制器信息以及虚拟网络的子网信息，创建一个逻辑的虚拟网络，返回虚拟网络的ID号；进而基于交换机信息，创建一一对应的虚拟交换机信息；然后对主机信息，依次创建虚拟端口，绑定到特定虚拟交换机，最后，对链路信息，依次创建端口映射，进而对相连接的端口建立虚拟链路。至此，整个虚拟网络创建成功。
-
-\begin{algorithm}[!htb]
-    \caption{虚拟网络创建}
-    \label{code-1}
-    \begin{algorithmic}[1] %每行显示行号
-        \Require 物理网络拓扑图，$topo$
-        \Ensure 租户虚拟网络ID号，$tenantId$
-        \Function {createCustomNetwork}{$topo$}
-            \State $ctrls \gets topo['ctrls']$
-            \State $subnet \gets topo['subnet']$
-            \State $route \gets topo['routing']['algorithm']$
-            \State $switches \gets topo['switches']$
-            \State $hosts \gets topo['hosts']$
-            \State $links \gets topo['links']$
-            \State $tenantId \gets createvNetwork(ctrls,subnet)$
-            \For{$dpid$ \textbf{in} $switches$}
-            	\State $createvSwitch(tenantId, dpid)$
-            \EndFor
-            \For{$host$ \textbf{in} $hosts$}
-            	\State $(vdpid, vport) \gets createvPort(tenantId, host['dpid'],host['port'])$
-            	\State $connectvHost(tenantId, vdpid, vport, host['mac'])$
-            \EndFor
-            \For{$link$ \textbf{in} $links$}
-            	\State$(srcdpid, srcport) \gets (ink['src']['dpid'], link['src']['port'])$
-            	\State$(dstdpid, dstport) \gets (link['dst']['dpid'], link['dst']['port'])$
-            	\State $(srcvdpid, srcvport) \gets createvPort(tenantId, srcdpid, srcport)$
-            	\State $(dstvdpid, dstvport) \gets createvPort(tenantId, dstdpid, dstport)$
-            	\State $connectvLink(tenantId, srcvdpid, srcvport, dstvdpid, dstvport, route)$
-            \EndFor
-            \State $startvNetwork(tenantId)$
-            \State \Return{$tenantId$}
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-
-\section{通信模块}
-通信模块主要实现进程间得异步通信，本文基于消息队列实现，由发送方和接收方组成。发送方主要实现的功能是将需要发送的数据，准确无误的发送至消息队列中，消息队列用于存储通信双方需要传送的数据，直到接收方从队列中读取完成。
-
-发送方的具体实现代码如下所示：
-
-%\begin{python} 
-\begin{minted}[linenos=false,fontsize=\scriptsize,bgcolor=bg]{python} 
-#!/usr/bin/env python
-#coding=utf8
-import pika
- 
-class Sender(object):
-    def __init__(self, host):
-        """
-        self.connnection:连接rabbitmq服务器
-        self.channel:定义队列
-        self.result:定义返回队列
-        """
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=host))
-        self.channel = self.connection.channel()
-        self.result = self.channel.queue_declare(exclusive=True)
-        self.callback_queue = self.result.method.queue
-        self.channel.basic_consume(self.on_response,no_ack=True,queue=self.callback_queue)
- 
-    def on_response(self, ch, method, props, body):
-        self.response = "success"
-
-    def request(self, body):
-        self.response = None
-        self.channel.basic_publish(exchange='',
-                                   routing_key='test',
-                                   properties=pika.BasicProperties(
-                                         reply_to = self.callback_queue,
-                                         ),
-                                   body=body)
-        #接收返回的数据
-        while self.response is None:
-            self.connection.process_data_events()
-        return self.response
- 
-sender = Sender('127.0.0.1')
-response = sender.request("request")
-print " [x] Requesting request"
-print " [.] Got %s"%response
-
-\end{minted}
-%\end{python}  
-
-接收方具体实现代码如下：
-
-%\begin{python} 
-\begin{minted}[linenos=false,fontsize=\scriptsize,bgcolor=bg]{python} 
-#!/usr/bin/env python
-#coding=utf8
-import pika
-
-class Receiver(object):
-  def __init__(self, host):
-    """
-    self.connnection:连接rabbitmq服务器
-    self.channel:定义队列
-    self.result:定义返回队列
-    """
-    self.connection =  pika.BlockingConnection(pika.ConnectionParameters(host=host))
-    self.channel = self.connection.channel()
-    self.channel.queue_declare(queue="test")
-\end{minted}
-
-\begin{minted}[linenos=false,fontsize=\scriptsize,bgcolor=bg]{python} 
-    self.channel.basic_qos(prefetch_count=1)
-    self.channel.basic_consume(self.request, queue='test')
-
-  def request(self, ch, method, properties, body):
-    print "Receive %s"%body
-    response = "success"
-    ch.basic_publish(exchange='',
-            routing_key=properties.reply_to,
-                      body=response)
-    ch.basic_ack(delivery_tag = method.delivery_tag)
-
-receiver = Receiver("127.0.0.1")
-receiver.channel.start_consuming()
-
-\end{minted}
-%\end{python}  
-
-\section{控制器模块}
-\subsection{可用带宽测量}
-本文基于包对算法，实现细粒度的链路可用带宽的测量，包对技术的核心思想是，连续发送两个背靠背的数据包，由交换机A发送至交换机B，根据两个数据包到达交换机B的时间差，用数据包的长度/时间差，得到精确的链路可用带宽。经测试证明，该方法在低带宽模式下，具有相当精确的测量值。
-
-该技术的实现，要求精确的时间差，对此本文拟定的方案是：首先SDN控制器对交换机下发两条特殊的流表，用于进行带宽测量的数据包的转发工作。对入口交换机下发流表执行的动作是连续两次转发该数据包，从而在链路中产生两个背靠背传输的数据包，对于出口交换机下发流表执行的动作是将数据包转发回控制器。具体如图\ref{fig:spaceband}所示。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.6\textwidth]{logo/spaceband}
-  \caption{链路可用带宽测量模型}
-  \label{fig:spaceband}
-\end{figure}
-
-为了在数据包中存储到达目的交换机的时间，本文对OVS交换机进行源码变更，在匹配到特殊数据包（用于测量带宽的特定数据包，用特殊的IP地址标识）时，对数据包做改动，将数据包IPv6字段替换成当下时间，而后将数据包发送给控制器，控制器从数据报中解析出到达交换机的时间，即可得到背靠背数据包到达目的交换机的时间差，数据包的大小与时间差的比值，即为当前链路的可用带宽。而对于测量用的数据包，本文通过SDN控制器模拟一个满足需求的特定数据包下发给交换机，用于在交换机之间进行传输。
-
-对于OVS的二次开发，主要涉及到对特定数据包的修改工作，即将数据包中的IPv6字段替换为当前的时间，具体如伪代码\ref{code-2}所示。由伪代码可以看出，本文对特定数据包的要求为源、目的IP均为0，由于该数据包由SDN控制器模拟产出，而且在实际的生活中是不存在的，所以不影响整个系统的运行。
-
-\begin{algorithm}[!htb]
-    \caption{OVS为数据包添加当下时间}
-    \label{code-2}
-    \begin{algorithmic}[1] %每行显示行号
-        \Require 数据包，$packet$
-        \Ensure 包含当前时间的数据报，$newpacket$
-        \Function {modifyIPv6totime}{$packet$}
-        	\State $srcip \gets packet.get('srcipv4')$
-        	\State $dstip \gets packet.get('dstipv4')$
-        	\If{$srcip==0$ \textbf{and} $dstip==0$}
-        		\State $localtime \gets time.time$
-        		\State $packet.update(ipv6, localtime)$
-        	\EndIf
-      		\State $newpacket \gets packet$
-      		\State \Return{$newpacket$}
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-
-对于控制器端主要开发的功能包括，第一、模拟源、目的IP都为0的IP数据包。第二、为两个交换机下发用于测量带宽的流表。第三、对于控制器接收到的数据包，如果数据包满足源、目的IP都为0，则对数据包进行解析，获取时间差，计算当前链路的可用带宽。具体如伪代码\ref{code-3}所示。
-
-\begin{algorithm}[!htb]
-    \caption{SDN控制器测量可用带宽}
-    \label{code-3}
-    \begin{algorithmic}[1] %每行显示行号
-        \Require 链路的源、目的交换机信息、数据包，$srcswitch,dstswitch,packets$
-        \Ensure 当前链路的可用带宽，$bandwidth$
-        \Function {add\_flow}{$srcswitch,dstswitch$}
-        	\State $srcaction \gets [OFPActionOutput(2),OFPActionOutput(2)]$
-        	\State $dstaction \gets [OFPPCONTROLLER]$
-        	\State $macth \gets OFPMatch(src="0.0.0.0",dst="0.0.0.0")$
-        	\State $addFlowMod(srcswitch,match,srcaction)$
-        	\State $addFlowMod(dstswitch,match,dstaction)$
-        \EndFunction
-        \Function {simulatePacket}{$srcswitch$}
-        	\State $pkt \gets packet.Packet()$
-        	\State $pkt.update(ipv4(srcip="0.0.0.0",dstip="0.0.0.0"))$
-        	\State $sendpacketout(pkt, srcswitch)$
-        \EndFunction
-         \Function {calculateBandwidth}{$packets$}
-         	\State $starttime \gets packets[0].get(ipv6)$
-         	\State $endtime \gets packets[1].get(ipv6)$
-         	\State $bandwidth \gets (packets[0].size()/(endtime-starttime))$
-         	\State \Return{$bandwidth$}
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-\subsection{已用带宽测量}
-对于已用带宽的测量，本文基于数据包统计的方案实现。由第二章中的表\ref{table:flow}可以看出，流表中具有计数器字段，计数器用于统计流表被匹配的次数，以及匹配的数据包的大小。本文基于此，提出了基于计数器的已用带宽测量，通过统计某段时间内，从交换机某端口发出/接受的数据包数，取平均值进行已用带宽的测量工作，具体实现如伪代码\ref{code-4}所示。
-
-\begin{algorithm}[!htb]
-    \caption{SDN控制器测量已用带宽}
-    \label{code-4}
-    \begin{algorithmic}[1] %每行显示行号
-        \Require 链路的源、目的交换机信息，端口号，$srcswitch，srcport,dstswitch,dstport$
-        \Ensure 当前链路的已用带宽，$bandwidth$
-        \Function {get\_counters}{$srcswitch，srcport, dstswitch,dstport$}
-        	\State $inputBytes \gets getCounters(srcswitch, inport=srcport)$
-        	\State $outputBytes \gets getCounters(srcswitch, outport=srcport)$
-        	\State $allBytes \gets (inputBytes+outputBytes)$
-        	\State \Return{$allBytes$}
-        \EndFunction
-        \Function {calculateBandwidth}{$srcswitch，srcport, dstswitch,dstport$}
-        	\State $bytes1 \gets GET_{-}COUNTERS(srcswitch，srcport, dstswitch,dstport)$
-        	\State $time.sleep(sometime)$
-        	\State $bytes2 \gets getcounters(srcswitch，srcport, dstswitch,dstport)$
-        	\State $bandwidth \gets ((bytes2-bytes1)/sometime)$
-         	\State \Return{$bandwidth$}
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-\subsection{时延测量}
-时延的测量，本研究采用最基本的基于三角模型的测量方法。即控制器与两台交换机组成最小的测量单元，分别测出控制器到交换机的时延以及三边的总时延，做差值即为链路的时延。模型如图\ref{fig:delay}所示，图中链路的时延即为t3-(t1+t2)/2。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.6\textwidth]{logo/delay}
-  \caption{链路时延测量模型}
-  \label{fig:delay}
-\end{figure}
-
-具体实现如伪代码\ref{code-5}所示。主要包含流表下发、数据包模拟、时延计算模块，首先计算数据包从控制器到交换机的时延，需要为交换机下发流表，匹配到特定数据包以后，返回给控制器，而后控制器模拟出符合该匹配规则的数据包，发送给交换机，记录当前的时间，数据包到达交换机后，匹配上特定流表，数据包返还给控制器，至此控制器根究当前时间，利用时间差求解出控制器到交换机的时延。同理可以得到控制器->源交换机->目的交换机->控制器的时延，利用前面的公式即可得到链路的时延信息。
-
-\begin{algorithm}[!htb]
-    \caption{SDN控制器测量链路时延}
-    \label{code-5}
-    \begin{algorithmic}[1] %每行显示行号
-        \Require 链路的源、目的交换机信息，端口号，$srcswitch,srcport,dstswitch,dstport$
-        \Ensure 当前链路的时延，$delay$
-        \Function {add\_flow}{$srcswitch,dstswitch,srcaction,dstaction$}
-        	\State $macth \gets OFPMatch(srcmac="00:00:00:00:00:00",dstmac="00:00:00:00:00:00")$
-        	\State $addFlowMod(srcswitch,match,srcaction)$
-        	\State $addFlowMod(dstswitch,match,dstaction)$
-        \EndFunction
-        \Function {simulatePacket}{$switch$}
-        	\State $pkt \gets packet.Packet()$
-        	\State $pkt.update(mac(src="00:00:00:00:00:00",dst="00:00:00:00:00:00"))$
-        	\State $sendpacketout(pkt, switch)$
-        \EndFunction
-         \Function {calculateDelay}{$packets$}
-         	\State $t1 \gets time(controller->srcswitch->controller)$
-         	\State $t2 \gets time(controller->dstswitch->controller)$
-         	\State $t3 \gets time(controller->srcswitch->dstswitch->controller)$
-         	\State $delay \gets (t3-(t1+t2)/2)$
-         	\State \Return{$delay$}
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-
-\subsection{定制化流表下发}
-定制化流表的下发，主要是根据用户定制化的链路信息，进行流表的下发工作，从而实现数据传输路径的定制化，即租户可以根据当前拓扑的负载情况，选择一条最优的链路，通过定制化流表的下发，实现数据的高效传输。输入的数据为Json格式的链路信息。具体数据如下。
-
-\begin{python} 
-link = {
-	'hosts':{
-		'src':{
-			'mac':'type:str'
-		},
-		'dst':{
-			'mac':'type:str'
-		}
-	}, #链路两端的主机信息，包括源主机的mac地址，目的主机的mac地址
-	'switches':[
-		{
-			'dpid':'type:str',
-			'in_port':'type:int',
-			'out_port':'type:int'
-		}
-	] #交换机列表集合，对于每一个交换机，主要包括交换机的ID号、输入端口、输出端口
-}
-\end{python}
-
-具体实现如伪代码\ref{code-6}所示，针对用户发送的数据信息，分别对交换机下发定制化的流表。这里针对每个交换机，均要添加反向流表。从而实现主机的双向通信。
-
-\begin{algorithm}[!htb]
-    \caption{SDN定制化流表下发}
-    \label{code-6}
-    \begin{algorithmic}[1] %每行显示行号
-        \Require 定制化链路信息，$link$
-        \Function {add\_flow}{$switch,match,out_{-}port$}
-        	\State $action \gets [OFPActionOutput(out_{-}port)]$
-        	\State $addFlowMod(switch,match,action)$
-        \EndFunction
-        \Function {add\_customflow}{$link$}
-        	\State $hosts \gets link['hosts']$
-        	\State $switches \gets link['switches']$
-        	\State $srcmac \gets hosts['src']['mac']$
-        	\State $dstmac \gets hosts['dst']['mac']$
-        	\For{$switch$ \textbf{in} $switches$}
-        		\State $match1 \gets OFPMatch(srcmac=srcmac,in_{-}port=switch['in_{-}port'])$
-        		\State $match2 \gets OFPMatch(srcmac=dstmac,in_{-}port=switch['out_{-}port'])$
-            	\State $ADD_{-}FLOW(switch,match1,switch['out_{-}port'])$
-            	\State $ADD_{-}FLOW(switch,match2,switch['in_{-}port'])$
-            \EndFor        	
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-
-\section{GUI模块}
-本模块主要实现前端可视化操作，为租户提供操作的便捷性，本文中基于力导向图，实现了拓扑图的自动布局。该模式下，会对全网的整个拓扑图进行自动定位，节点与节点之间的互斥力，保证了节点的不可重合性。与此同时，拓扑元素可以实现可拖拽功能和手动定位功能，极大地提高了用户体验性。对于拓扑展示，本文主要实现了SDN物理网络、SDN虚拟网络的拓扑展示，在各自的拓扑图基础上，实现相应功能的具体操作和展示。具体如下。
-
-\subsection{物理网络显示图}
-物理网络的拓扑显示如图\ref{fig:physicalnet}所示，黑色的交换机代表云平台内部的br-int网桥，蓝色交换机是用OVS模拟的物理服务器之间的交换机集群，由图可以看出，租户可以进行物理网络的初始化，力导向图可以对拓扑中的元素进行自动布局。在此基础上，租户可以进行全局网络可用带宽的测量，测量数据会在相应的链路之上进行显示。通过对链路的点击选取，在输入框输入租户自有控制器的IP地址，可以实现vSDN网络的创建，创建的虚拟网路由租户自己的控制器进行集中管控。除此之外，租户亦可以进行删除虚拟网络的操作。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.8\textwidth]{logo/physicalnet.png}
-  \caption{物理网络拓扑显示图}
-  \label{fig:physicalnet}
-\end{figure}
-
-\subsection{虚拟网络显示图}
-虚拟网络的拓扑显示图如图\ref{fig:virtualnet}所示，该界面主要是实现对租户虚拟网络的拓扑展示，由图中可以看出租户可以进行虚拟网络图的初始化，虚拟网络的删除，虚拟网络已用带宽、时延的显示，以及选路功能。带宽、时延的测量数据会在拓扑图相应链路上进行显示，对于选路功能，租户通过点击链路的方式进行数据传输链路的定制化，后台通过解析链路信息，下发定制化流表，实现特定数据传输路径的设置。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.8\textwidth]{logo/virtualnet.png}
-  \caption{虚拟网络拓扑显示图}
-  \label{fig:virtualnet}
-\end{figure}
-
-\section{本章小结}
-本章主要对系统功能的具体实现做了详细的介绍。首先论文介绍了网络虚拟化模块，对虚拟化和去虚拟化的流程做了详细的解读，分别对PacketIn、PacketOut、FlowMod的虚拟化和去虚拟化的流程进行了讲解。针对虚拟网络的创建，在伪代码中做了详细介绍。通信模块主要介绍了基于RabbitMQ实现进程间通信的代码实现。对于控制器模块，本文对SDN模式下，可用带宽、已用带宽、时延定制化流表下发进行了详细的介绍。最后在GUI模块中，介绍了物理网络、虚拟网络拓扑图的前端显示，以及在相应模块上实现的不同功能。
+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
+sghuAc0ks5hw8MVCR12SSEBMEBYbdwNeg54B92UNTmlXvDpvH44rAfjvbpqEphML
+le4rAx5TQEw4OoK6/ca8Cw/kCCvTfYJd9FXc088krhhjtg77ugXE8Yz4cmkztvlS
+0whi6FyKoSL6Rg6HXLPn8P6MbljwWu/KgWS3X/jzOpOMkrURmU7dlHsPdbJfMbab
+p7u5KNwrEtOnxRr88RcBgnR+y+VD8OhJGg4Op9KjYUq0Ax5BAOjlLbk4Hnjl6PQS
+7pQLfAadepV03oKYa7OmJsR1eZQyBFsFqw0BUxVKYwHH8aPqwBuM29dzKNxLa+U+
+m0/fasuWwsCkepH4dg+adK9SlXafVL6Xeikfa+Ps8gQCJPFzsU7DuJNX8H2TlGMt
+v2CaAgyakGrZJED4QDUG6bTBsGU3AmTlFuvx7fJBy5Ik2xKlP80s4rkFcslHA84d
+zPkXnRcQdM9ZzQJR1mz5/VA7IWcT/z1WoHO4DD48FPe7yeVQXJ/5XAotkJZ3JxBE
+do88zmIEOMmJt7aEDsl6hK7agxoOqYVKGRn6+wbdDQYrDlP/JQJluWz0joZcW2pP
+AntmcIjbrMzaVTNtOTKFLZm3W2BMb/smMbjybqkq+2SA8OierSABfWGO2ce6kKce
+ZW4ifgbdnsYeZOfGZQ1g1MmHb79h6KRvQF2sO7Ui7J/9McE68wh6voe3jGx/OGWs
+NdyMKhSPi7Kr12+tQV+gp/Ji0/4BaUhI6eIoL/Ol5XvKEUpx+h+lq9h45XcWG/vv
+3mN7XuToxdW3U1NutmwA3E5D62QEzflIrk65oU/wT/wI5gRHRHR4QhukzOm6o83y
+B14oz9WARK2KqvcZr3DuVIe1RK0m0IhnaNaJbQs24aH478qD7xaNShFrMrWVLDIf
+CVC4oUI2V3DHW59I3OP2BKpkzsgEWLjnbX6qOLDqZQiRJRyinu8d3ywl6TfKD6ef
+xWElhOR4iPg57eU93unBcS99kXpQKnIl+w868Gd6cIc2wWa97jL0LlabGuERo4Ls
+a9P41s01/IqAFApUWDKP/zz6lXnPqo15mrmWaJAD/+nzAHXnC5OYGpW+HxngY/o3
+kx8ysnLBoxA78SVZ/Rpf/5J9PZls8c8wWqNB5PgwI85Ao9tBcZswngh/GAMhVcqc
+W2XhXYlrkcNk+rvQJipnKay9wCr638VvPd1JPPLUf9BgkrTfqICfJIMuaMnA7rSf
+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

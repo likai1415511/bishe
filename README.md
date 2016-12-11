@@ -38,6 +38,3 @@
 
 脚注使用带圈数字的表示方法，此处为示例 1\footnote{测试脚注一} 和示例 2\footnote{测试脚注二}。
 参考文献可以使用\cite{BUPT_Thesis_Format_2014}和\onlinecite{BUPT_Thesis_Format_2004}的表示方法。
-
-#### 现阶段存在的问题
-- 没有写国内外研究现状

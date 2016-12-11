@@ -1,117 +1,193 @@
-\chapter{系统测试}
-在实现系统功能的基础上，需要对系统的功能、性能进行测试。本文搭建了多节点云平台，在此基础上进行了功能测试和性能测试。功能测试验证了租户虚拟网络之间的隔离性，带宽、时延的测量功能，以及租户数据传输的链路切换功能。性能测试对SDN模式下流表的下发性能进行测试，验证SDN模式下集群大小对流表下发性能的影响。通过对SDN模式和传统模式下数据传输效率的测试。验证SDN模式下数据传输的效率是否有所降低。
-\section{实验环境}
-本文搭建的基于SDN的云平台，包含4台物理服务器，其中有一台单独配置为网络节点，主要负责云平台中网络资源的管理。两台单独配置为计算节点，一台配置为控制节点和计算节点。计算节点主要负责虚拟机的创建，控制节点实现集中调度的功能。具体各节点以及服务器硬件信息如表\ref{table:environment}所示。
-
-\begin{table}[!htb]
-    \centering
-	\caption{云平台实验环境}
-	\label{table:environment}
-	\begin{tabular}{|c|c|c|}
-	\hline 
-	属性 & 服务器配置 & 操作系统 \\
-	\hline
-	计算节点& \enter{ubuntu1(内存：64G，CPU：24核，硬盘：2.3T) \\ubuntu5(内存：64G，CPU：24核，硬盘：2.4T)\\ ubuntu6(内存64G：，CPU：24核，硬盘：450G)} & Ubuntu-14.04 \\
-	\hline
-	网络节点 & ubuntu-1404-1(内存：24G，CPU：4核，硬盘：1.4T) & Ubuntu-14.04 \\
-	\hline
-	控制节点 & ubuntu5(内存：64G，CPU：24核，硬盘：2.4T) & Ubuntu-14.04 \\
-	\hline
-	\end{tabular}
-\end{table}
-
-在云平台中，本文选用project-likai租户进行相关测试。该租户共计包含11台虚拟机，其中10台虚拟机基于CirrOS镜像进行创建，1台虚拟机基于Ryu镜像进行创建，该镜像集成Ryu控制器，同时为该镜像添加了开机自启动脚本，在虚拟机启动时，自动运行Ryu控制器及相关应用。默认情况下，该控制器占用TCP的6633端口，租户可以登录该控制器虚拟机，自定义控制器的启动端口。虚拟机的详细列表如图\ref{fig:allhosts}所示，图中详细介绍了虚拟机的名字、镜像、IP地址、虚拟机的运行状态，以及虚拟机的配置信息。图中的m1.tiny，代表的配置信息为内存512M、硬盘1G、vCPU为1核。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.8\textwidth]{logo/allhosts.png}
-  \caption{租户虚拟机列表}
-  \label{fig:allhosts}
-\end{figure}
-\section{功能测试}
-\subsection{租户隔离性}
-本文基于底层的物理网络，进行了虚拟网络的创建，具体如图\ref{fig:create-virtual}所示，由图中可以看出，本文选取test-3, test-4, switch0, switch2, switch3, switch5, switch7进行虚拟网络的创建，控制器运行在Ryu-controller虚拟机中，IP地址为192.168.1.100，租户创建的虚拟网络由运行在该虚拟机中的Ryu控制器进行集中管控。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.8\textwidth,height=0.50\textwidth]{logo/create-virtual.png}
-  \caption{虚拟网络创建图}
-  \label{fig:create-virtual}
-\end{figure}
-
-创建生成的虚拟网络如图\ref{fig:virtualnet-test}所示，图中的交换机和虚拟机与上图之间是一一对应的关系。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.8\textwidth,height=0.50\textwidth]{logo/virtualnet.png}
-  \caption{虚拟网络拓扑图}
-  \label{fig:virtualnet-test}
-\end{figure}
-
-为了进行租户隔离性的测试，本文选取test-3虚拟机，让其分别与test-4和test-5进行ping测试，由图\ref{fig:subfig:a}可以看出，test-3与test-4属于同一个虚拟网络，可以进行正常通信。而对于test-3和test-5，由图\ref{fig:subfig:b}可以看出，两虚拟机不属于租户创建的同一个虚拟网络内，故不能直接进行通信。实验表明，租户创建的虚拟网络之间是相互隔离的，数据传输是安全可靠的。
-
-\begin{figure}[!htb]
- \centering
- \subfigure[test-3与test-4测试结果]{
-   \label{fig:subfig:a} %% label for first subfigure
-   \includegraphics[width=0.485\textwidth]{logo/ping.png}}
- %\hspace{1in}
- \subfigure[test-3与test-5测试结果]{
-   \label{fig:subfig:b} %% label for second subfigure
-   \includegraphics[width=0.48\textwidth]{logo/ping-cannot.png}}
- \caption{租户隔离性测试图}
- \label{fig:isolation} %% label for entire figure
-\end{figure}
-\subsection{带宽、时延测量}
-为方便租户在前端进行网络负载的查看，本文实现了对物理网络和虚拟网络带宽、时延的测量以及前端界面的可视化。对于物理网络的带宽测量，测试结果如图\ref{fig:bandwidth}所示，实验表明，租户可以查看到物理网络当前的带宽使用情况。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.8\textwidth,height=0.50\textwidth]{logo/bandwidth.png}
-  \caption{物理网络带宽测量图}
-  \label{fig:bandwidth}
-\end{figure}
-
-对于时延，本文仅仅实现了对虚拟网络的时延测量工作，通过为租户控制器开发的北向应用，实现虚拟网络的时延测量工作，测试结果如图\ref{fig:virtualdelay}所示，实验表明，租户控制器可以实现对虚拟网络时延数据的测量工作。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.8\textwidth,height=0.50\textwidth]{logo/virtualdelay.png}
-  \caption{虚拟网络时延测量图}
-  \label{fig:virtualdelay}
-\end{figure}
-\subsection{链路切换}
-对于租户创建的虚拟网络，本文实现了链路切换的功能，可以让租户实现对数据传输路径的定制化，如图\ref{fig:virtualnet-test}所示，host0和host1之间有存在两条传输路径。分别为链路1：host1-vswitch0-vswitch1-vswitch3-vswitch4-host0，和链路2：host1-vswitch0-vswitch1-vswitch2-vswitch3-vswitch4-host0，本文首先选取链路1进行数据传输，通过选路按键，进行定制化流表下发后，host0与host1进行ping测试，得到的带宽测量图如图\ref{fig:subfig-virtual:a}所示，由图中可以看出，该模式下，数据按照链路1进行数据传输。随后，选取链路2，并通过选路下发定制化流表，进而进行带宽测试，发现数据传输的通路已然变为链路2，具体如图\ref{fig:subfig-virtual:b}所示。实验表明，租户可以自定制数据转发路径，通过选路操作进行定制化流表的下发，从而实现对数据转发路径的控制操作。
-
-\begin{figure}[!htb]
- \centering
- \subfigure[定制化链路1]{
-   \label{fig:subfig-virtual:a} %% label for first subfigure
-   \includegraphics[width=0.48\textwidth,height=0.40\textwidth]{logo/band-virtual.png}}
- %\hspace{1in}
- \subfigure[定制化链路2]{
-   \label{fig:subfig-virtual:b} %% label for second subfigure
-   \includegraphics[width=0.48\textwidth,height=0.40\textwidth]{logo/band-virtual-2.png}}
- \caption{虚拟网络链路切换图}
- \label{fig:customlink} %% label for entire figure
-\end{figure}
-\section{性能测试}
-\subsection{流表下发性能测试}
-引入SDN后，在SDN模式下，对单条流表的下发时间做了测试，验证随着数据中心网络的扩大，流表的下发效率是否会急剧下降，对数据的传输是否有较大的影响，本文分别对租户A和租户B的网络进行了测试。测试结果如图\ref{fig:flow-time}所示。结果表明，随着云数据中心网络的扩大，单条流表的下发时间随之增长，但增长的趋势逐渐变缓，效率并未大幅下降，仍能满足用户对数据传输效率的要求。
-
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.6\textwidth,height=0.40\textwidth]{logo/flow-time}
-  \caption{数据中心单条流表下发时间}
-  \label{fig:flow-time}
-\end{figure}
-\subsection{数据传输效率测试}
-本文分别对SDN架构和传统OpenStack架构下的数据传输进行测试，对比引入SDN后，数据的传输速率是否受到了影响。本文以租户A的网络作为实验对象，在其中的两台虚拟机之间传输固定大小的数据包，分别测试在传统架构和SDN架构下的数据传输时间，数据包的大小在200MB-600MB之间，实验结果如图\ref{fig:transmission}所示，结果表明，引入SDN架构后，数据的传输速率并未得到大幅下降，仍能很好的满足用户的需求。
-\begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.6\textwidth,height=0.40\textwidth]{logo/transmission}
-  \caption{SDN与传统架构下的平均数据传输效率}
-  \label{fig:transmission}
-\end{figure}
-\section{本章小结}
-本章主要是对系统进行了测试，首先介绍了实验环境，对云平台的服务器信息做了简单概述。测试主要分功能和性能测试，功能测试主要对租户的隔离性，链路带宽、时延的测量，以及链路切换进行了验证。性能测试主要包括流表的下发效率以及SDN模式与传统模式数据传输效率。结果表明，SDN模式并未降低数据传输效率，能够很好的满足用户的需求。
+U2FsdGVkX1+e04Gvk1DFDOhE+2oxooXC8I1fBg2NqDTABL4A1SydUPm9LvKZjp9r
+G5gE7l5/LqPDIm1DlUN7lf5FIdO2zNm5CzS9eV/BfxSYp5oMLDTV5icc4dvJkVgP
+/AkAlcBxPx/6sXUUzAer+ugzJusRvgq9oZS9bsOQk1E0/CPoiZPRSWIP4TfpqfED
+HzfwBMIDhuf8C5VKJeDTbA+TDLh7Wf17XnnCuypjDexMCjqD9KNZeTGODnIGSTEj
+jg/BD2LkDKAgevIGdIrNQ7vZ1iMjOzlLJ2aP35X9Qkl0OPhyjtJQEbmaPGQ82tAL
+aDJMRCprDGLu+DkRoAaZQytOdGsYqMTKV/hX+wI9Vs8mYEGOd/DN7iTP7asA5l/i
+O8ul2n8Rg1eW/+cpNxVVIvCeG/hW1BD+fdoWLthvxxA/XrrfHVpYB9hEbyqg/46x
+8dYmereYC5ryDqJywIBc53+TP32q/p04a/an7i/o2TB9cmpTriBAiHYYxIOkloHU
+eRx3UtKPb6JYweHl1OVoUijwc+EzJlQES262BsZFIPKgJR6T4kNyRbXKazqZeUK7
+wdp6OTffw1S+QPFWaD2FXXcKSSj3PHM/2VkNKJgaxFSURghPUHTbPQzbjw5+Cn1q
+TIc0k2Y+RXB4tIz7gmUrMpUd0ftXoQ5Oveja59L4GBKVRAwwMGossafiPPPNYyU1
+yBE0p1ghF67xBbu/UkRZHTnqd83ffqdi+N4Rs8LSnGSVRAwwMGossafiPPPNYyU1
+pum8y16SQnGZ/kPCvWXRMrq4far9YNSOdhF3E4Wi/sFHWRRXd4xZU7k69eVjEjeG
+hQQ9VeUz/M4ZvlkfwxAmlrPAFrO1VogzMu60z8QCKaaCUbAr+Sx0sdoRxpAVQgrB
+V639F4f8us1y7Mb4GA91ZIGqPjhCCizWQGXuedSK4ZLdG6D8UUgktulntNkJz6IR
+oV5g3BhidkY8caEjzyAHDJrWuLZ2QBHYyH1Zpr0AD7+LrG5v7vyPQLQ1dHRvCk4W
+7aBzVGJNkC7Oov5OG/10E4g2Bz4qeKKKdXSyhZDZZZiC01hR75nS1l838J5F+NsV
+8nPF/GJWHGiCyZPc7hc+iDsy2RF5XxwpM1trS26nX5ZZhJz6dI+oddmmqZWpG5b9
+CwgDHRLFLLnCj9bX5iTbBjlHOSPzqHePc/XAciZQwU/A8sjHU6CVIFITb6NhTx+k
+9Q+sHo4j7m4t9kpA0sHkaPuEqphQiEI+j9NxUhHFtm6jUjFcBg+yiLQyvLJ8Skrd
+xp/Ral0fyhvV/iT/3KifwMCGzEfAVdt6gcJsxYs5W6Mt/WA74/GZPbmK6CCw23ki
+SHszAQRHBqZ1VLL7AfY4NWDe95NjdpeQ9qBi5N2YIhQ7EVByTxva3QrFpwwwdD/r
+vipUdUBwsTBpbeediS3si94iufMCwaiZ2MG/dLMWtrKG54nXvPIFTGUcXpSq07zh
+n4scpoR/hQiVvolYqOkoZATWtv6eFpiKE8Djxui/MqUgynTHApvZx8EkxaWcSb9I
+SCItU0qODQDyewzW2RmMSr8+N3kJLuupxGFwVie8pRhZAwieHqjxuhfoZ2Q08MjO
+QM0JjmeObJ43ofylusKiqVKKbW1L53evhZVmTbFOuY9c+wCdf7tT7oltxoSOyZrs
+Rf5+GaOuQwG3aF0B9srWswcoTFuwdrjVPuGvRaNY95PwGiUAJ909W+zDLKEW8oNW
+xBGUJarTibFwQPEyMOb20fDwwb8xdHm/65UbNGsKjlyg/z/T/+Ma/07qjAHKBXuG
+OEC6ct6xFYUDig77QSVBfBykX5T++BpifB47rU9E1ch//SyhnJKa+UKb7W56V32a
+FW2n9YfIaJy7ohsKIp72nr8QB6mnxq7Sx5/CdI5ClLV65isdmEICC/LxZA8t7ZmB
+X/WlP3SwuMA7NUw6wYxIUXqkkGK1g1d18AL1OFG5i1Ztck6BJTRRSkDotG4HG9yd
+HX7sPtzsGfbsy0Y+si1zK4/9umKPyQSHZ4TEcL0zerZpLKE+RQL7w5VD1Yxcb9DA
+q3HgCFP6vMiRHuNd0+AzH1eaw2nbGp4SrN06g2Mf3GxUGmJaE7aS2nutIae5NyNb
+bI+10A9zC+F4oNHLo6P6/q69lTl1d2JD1A+84bxXvplpLKE+RQL7w5VD1Yxcb9DA
+84VIM0jYagRQ8wSfjJFoVTHUPUHBxSGGefgDX0aeYU3Nmm5+BbVvwJHw0eUnUkn8
+3GGbqhV/yQVdqlNSHq6YPiR2oMFWLRjGKxzCPrVoA8C0dqNeUd0ra1xVYeMWrcCM
++XMGEtavXsmufusbQ12quapwW1XNkTuoJxEN8ovm5iReWJ2yMQQhu06kPrGMiKWi
+L/C7PeW4IIVSfcGpRVvjT/IcBikXH6OX5KJJiiQnvzlXJRhhriaJYHNstpajeXuo
+cGy2x/saiQYGYU2qhAJbe3qwyfs1A0VTL4vxMZ4PdcIduY92bWtTGWk8uGUACn5X
+Ij5b7RMP36fxKBJpLAD7tfHb/kBY/RQKrtRKZedhQLeVI3XLsMJZJBxyidLZMJQK
+YnjQymasxSkFD27qKtX6R08q54vJbKbNP573wag8W/gWPXGE8f5UIV01z8QrbxfQ
+y0pDci5QsISp/K3vm7kPOHQWXFedUHCCVx5SHAIaJ8SAKADnFO5rG4h0tjmk6JxX
+5ZFYj9MPdOC2AzOFLDbcpQETys+XZ38sP5tMBeY4vI8hBI0ifv+2R3mapQtUJq//
+lkrj33DYTx0v7Ujw5JTpAUoyheEYqSD2Q77OA8THlcli20ggJlhdNhJqPXzVAKdH
+eUalAVjVm6JhjNiX6wbDHYhhRdcrKZuajD/kn/Ci39U3dl5lOJPp2L9I9RNeVU35
+mJU5OPK374kUSrDakvTlo7mwISxcmWr7fOGT+wXywDXkja5UJm7eTQKnQPmi3SyY
+cpe5IygvpMy3KTmSaXDKRy0VZtgOCskE6DDmCGmZDXQmT+oofEJ9dZ6P1onRjOHF
++zSqyuDKw79eyWUg3COh3Zo2p14XCag6FYLnqyKEgksA8I7QT2eCONdjiQekHFyG
+ep2BxE+tC53lrpFjJ8vZh7Gwx3uHVdiryJ9SsDDDILK619MHuB8WBgBz3A92yH3U
+RDLc/iO/F32knKpwGuyZr2/7YiNrjRIwd74nqN3VSoM1d7WLVSGRDAcbqDXnxPIN
+p73WkFGbURUrBy4ig2cEH/sYFe1dDorDUUwdIetm+UfanjwNNLlwkoOC1mODtRm9
+xkigOvykBV9tS7pWSdN3JokF7J01qM8o6pBevsMdNx0kLR6krbraMD+A82ijjDbZ
+nkDKGzuOcIdeeLXqeUPOqsFZBQztkptqiLKx6Ec18023xgne1bHErgwLP7mrWSGs
+rWxIuiHq7y9i4tzmBBIk9OtnHzhcTEMZ2jVN0liOmBnjyq1mR7OwEQKjFG4qvf+f
+qt+iKpmF27RXPBxZdk/TAA1jnef/cyaaJDPBmUA3HZPmhsjO0XNku79y+BV2DRrc
+gaIBuURxgQQLkQUF5kW+qhm6rbMJN8SCFGnSW9FZhNOl6+yUNuEovLvAAJMUVQ9J
+Ld9pgqAmDGq30zy/tCU68y3MdcS1ICxTiK+ONlYsAgG9HO0BukLSzWerV8RfXmac
+TjS7dDYvg0WVjWCBqpRhmGUufdLbmCl1ruBTDbz9D9KomitJZV+nUaEfd+7styzN
+AJxbpusT7Pt8reKVJKCICbpwjTKaNTq6NtuDma53a2574H2JtwXTU4xBQDJAJ7UP
+nPXS69RYT21cwrFLA6YSnlm/FyPAeW8FlaVe/hw2YEn7vur7RrniakJu56kymMVJ
+Am0CN3WCVPjx93TRBMK4F3NsTnR00X09MuKUBEQORgxyopCKT9FLXUKYvUAeYpyB
+YAaIsmJwtWEoTp2gdG5oxNP2aeFLtXQ9xMvDqB6M/ZlRFX6IZh/5v6eXi08wScOE
+S30lGuQYldWSILqfGv/ve3GVgCQot9YK2iOrXa5ru1nGIIRKmUsxZmeDD39w762G
+BsWKiEQJ17f27k+13LSXSrkbwaBGNdOgIYcEDyq+YcV0Cmea0pNy4JW5jfHl14j1
+I6ogLRJFM1rz28JBrBPGmNUwjVjFgZGAfVGhDw3gQq2msDTRoWe85aam5/3LldL8
+Lky6UYMLwKRgrBTgetwHuuONrV2sUmEDwHW6drQHnYnCpgIRt4288Of3Yp4E/yF0
+1w/sDVzx0j770iOJI5qI48ATV+dy6T63XVyB4CV5jRyqTVrSPiTS1FCOI2G1QSUZ
+6xA/bP7kCadS6MT1WGvwxPrmYKphP422SHk2byC9N3u2Qq4Euz8ZFx7fA7CJ9Wwv
+U3p9A5KR8U4a5U9oMMpbJp1tJrgX1Qgju0VT1+SaX0jbJHP42X0vTjFLvvOxTfbw
+kJOvUzxJjlgS0OiLT2W91fo16llWIigxyZfwP1Kcnpgot9mwAKrJz+tSoD/vZEh4
+9mwvFPcSMclD9vd7ZGsPfDIitBeg+gaPmrc6YtxeqcBudI7nvD4yB/rb8UrSsyeO
+nwZ+egYrKAiSoisiwD8Ws/kWtXtXrU+mTIGg7Wh2W5Yj3x+QV/WHz2+n54Ype91Q
+9SR0wTj+BmRDMwHCXEfrcuUfJrN8l5bKWvkOev0m9hE5BnPFKas2NGFPWkvI7Qpy
+hp96pDSQnsqUdWbhNkdW92VvphbVHG4LsvUzr4cwXkAwRDXj5VvzlIYraQ2xKOi1
+6ZkZZ+i4TlrXvayVBO85HE1W6j2MKDHm/PzGt1qqXMyGW7YzfDAituzjNNBhzSJO
+65wVwT+Y5gWPWAHLIi/RhMenaZP9yPc/aIzdHkOs6Y1NuBpghZsPx8Xu4w2GFzj1
+SpEfx/aQT4bBYLZ1Ox6uLG2FPyHyyrgnpv470HWJkWe3m/MIJ9rS42zGgTFbN8Fr
+43lGEduyeIazgIUCNl/n7z5VY/7+KX2NsVwbtHwD4JtdHepr22BgGQWmOrU6wkcu
+RLIEDGFj5CKZ92+SYhjFwflkEc2djJCJX45OuVSAigIhfwZUHpJKfolXUqUMHZbB
+OxgFEeujR9/QeSJfFY/TtIiYMj1lyhvosHXjCU3znpj6HPY7F/hRdKfR8mCOc/nX
+DTsjTLO5L2XSys6UIR5k9SJvU8mO+yukEWYJ5LaxEdiOmqkYVnsfQAwIPBudF70a
+A/X6ICSbDxbVNiCxckALTrm3dNMfHFJiusbCa6/ULk6a1655owk9R3NmwJPzKRB6
+vXZMmcSXKd9CAALcmyx//2+uJGYFd9/uCFtXYHx2ehhzttlAd7lIWQeDUgU2EIxX
+M8fsGQHSYNV1nn1khRuL2tdjNBTk6IaFTG6jYetL0WlgN489n9de99vw4qS6+ObB
+Xq/XBsc3gs+O/7WEhxNomj3BabcGDkeZZHINUmNsPDmBDqJ4X/EEGMonlOT5ceza
++/5h/TCoeW0k7IQj+uAp4JWXuDYpdCDuGZzEDYvk6XQjD1yf37c7k3yKMsa2+IC+
+He/SuuUxWbAZT5rkK7C4rzNIYf6euPGXvNN9fmvZ9Vi+QXUmZxE0xjbWMgeCYlVW
+EpgZDnZlq0Q7FGKUya/LB+KMIJOrcaHBu6ylrsmJaUDUC2OdEQnoK9rz1jsq/3i7
+dRPh/N1WFrBh2PXTDLA3H2GU2p56u1txLp5j+bsV5eDhNQm4mS7Oxa+QOkSmxsnE
+duwTa+MJVmIt5U9hG1OvBZNt8rU5mnrpMyxpAa2FKjqgf1yL+sUUaPDfEq+SlnHu
+NfEw6NSEbS3mReUMdxypr/8AFHpUQfol5OEoprWKqyIfc3F+KUlewSu9PnvT+7Hu
+s0JsU23aPigEqcHQpyC3XUizo3q/3yl/iU9lq1ZY1Tnhn2HJHYGJHE2lQCuBL0oV
+L+uvJtmyQTgOWKs1CwPPK61Nr5y5Wg01r+qHiCU2FRCZ9axO5552K7XTI9IG6R7F
+zFVricCA4Oxv9UYUM3G5El7gOboeoBgPaxs3fatMNsMO99SQrI1FH5wuiov9V4H1
+H89ZShXxgi5EAM8wltv3ZWXOPPThf12/An4K2lcxlagJtvEY7gqnaG27pJ/Gwp7Z
+Hj4rYWT1q1NTBNVGA9iqYjIWIP0oifGjGNOLappEAZ4V2gVKr62txdLEs7lBjYki
+yQurC8b2oFgsBqxL+5Cijpx5u2FqmED+N7KLfdC4EhSyIQLh6aR3TtB9q8xEcA2U
+olF4Ulh/XtIrXt6R9FKoD9Gq8osIhJ+/U2ZnZmX8tn5z3hg4UPtEahyGU8V8Eq4m
+MppPVMzFTaenoh0abw0CyNiUbyZJJtWiA+TqqpWanb32XNUrNOzI178VFHYFoTZi
+aNdsnDC9+pbxNs7scfxRZNiIOGE/Kun75+UCJ9JbD4u0915nqe4visauZ3tjW2nB
+3k6EJ0QkzmSzqN+CSg8VpZw50lkffTLP5XiVkNG0fjTypxrfUNAGjSplSyLi8gI4
+s6Wt2NaZpRYnljTPK7rmPZDHm886UdTUBQHMpYgQVS/HvSZEDrG9gTGGIX4bczSV
+rjkeBm7i2Fa1kttVU+sv0zlHU5hFzG0szJrZOHRkhsWuEQvaO1lPDoWioB8D+Vb5
+EHaVQca/xUjbutKWlasMR0N8LZYQZN7pbVlrkvvyFx/o+0YNIPVaaojI9Q85/g2B
+JUxdnpTy9RnClkG+6+kEwOYvig0vZz/Sy1dhMl2peeoZczJQzp5cHMSsGknJhvIx
+fPAlFNO1YnQFN906vLtDTlNxz6o8I3bU0Jsdxo56y4ntnCHtFdWhGYApBjKAuxhc
+mSKK3Lmy7aWGB9V+vC3zkf5ScvwDXo+gzVONZcm53iHVX20V7EkIuqzmYTEME1Ul
+IX/WlKtmux4bQsH1X+FrZBoqs+E69oEJYBZphdGI8nwtAnWZjxWH3nr91lsB07Cn
+YWuZw2+ZP00epZi3TyA/Cgb56Mg+nxjCSMYNp5qNHHjDi2ITZNdUgWMeIBIwkuzc
+o+qZYaQ8lJ4bfg0lXFGZfqU8CMk/YrIXgqBSBIuDAsSGjduGAKYsaoiS84W6MLhi
+KOaZJs9Y8zgJQNsLItdF8XRGhKYRXdvV1O/Cz0Dnb7B0F228LzGorg/Lj2TRswKS
+Qs25t1twCBtBzkptctH/GVtQk7CaG1W5ghvUq5mO0Mv+gf/O1TGj1slWcmffqbKm
+kTSatUwpcJRJF2fkV4zrDSXOSaNVUcmsbFKNDkx9s+smDS89/WNBlcLuiy9RPD3c
+QkKWkOnBodaxEDO3CAmHVJ8GfnoGKygIkqIrIsA/FrP5FrV7V61PpkyBoO1odluW
+I98fkFf1h89vp+eGKXvdUPUkdME4/gZkQzMBwlxH63LlHyazfJeWylr5Dnr9JvYR
+OQZzxSmrNjRhT1pLyO0KcrRfDlUsBLV55OcrjAAAcqvejXal/eDkR+XQzQ/AG4fN
+mcCPsV6HS2X6lM0cIYJbda2oLco9U31vkPWf4vPr2VFw1ERpCpr0x2BEh9jTr9Zs
+un8UQ4oJRUtO/+Mc1SJd9IyABQdOTA+mgcq4Kp4v6xzO3VaX5mX8azc9r0/PNb0e
+lwnG0l3vah6249VVb0qYqSQ37Bq8AcjGA6FI/xrfFhxdkZ2i9LUgKPKlh/CJj9lF
+sIVsdqjnYxdweEULE+nchGyk5fILazBR7qUXH5+MOCVGiF+bUb2KMo5IpV6prKVb
+YR/Wt9JgoiwHjogNu4xV2RzvHHGvxyRqNHnhVdqCmHrkbWwUV12F6YT40Pe58gVS
+2yRz+Nl9L04xS77zsU328K03fQHGrBc7VuK8Ymly79UuQk4MxT1mg2fDThoxkj4L
+6DCMCYjkng7maJfFDA0MBI9NPygIvmS3zEH/wjEdCbIneg633ftyt8f5jFC9gNup
+q1BPVsMn78gUC2xEpNr/zXjIsRdCZNIa4zkRtNSacZ8gXYMf9+13I+hQpYMSopk5
+/dEJ8HV8Y0D3p1B7KU6vHIVZAqeph6EOtbG1dfCUPCBzxrKMb4OVq5cbtBD9fPUF
+3VDlu5TGyKThnwDuC+7Ip7KWFm2T6Synp2BwrckkeJJoD0S++l5NK6lXiy4MJa+u
+Ze6hZtAjDVa71Z/10fmCdkTVSrroxx2iwgISkbpVQGKk36Yc4tTZKpJ97NE3BFFQ
+Nda0NDlEGuWwxh0EBYi0sXn+CPsJZIoSTFrUtrJDwH61WoJQwh9HU9IsVArGFVvP
+B+pCW4GnKnnD7CK5xpqj4o/nPlDXkeS4dsSsjJ2yAYmAUCQ6kSlKi21FkEsPwEJz
+CTowqw4c57juoQJnUF1qsUXrze+NKHhmQOmAVuc0dLiqgiKZ1+4qLGmRLWArmdHM
+TB21V1NygRYmpSt6e8TiuZQoBIlNLVkZE7HxCz+XOaR+kK8rCgllULt/qgZWfSwb
+vizU2I0lSerQlpC4ladErnRj2pbyt2CTubdZZnvPZGMc43XVDF+KGy53EkM3SuNe
+QllMTfv2UjoCBzY22cQNdLA3NL6vA11fhmqYHgczj2kkHnbIN9jL3aIN8DGJHIDw
+5npDv5FgapNVt1pz6dtzO0vBxvYWWNJN5PWw439PrMIHqeVtbL/qCC7zGasqpcI/
+cyPgEyjFuATIecJpXhA9qEuQIaxuRkWWbueBd9ZE4sqCbLxbdv/wtn7L+tVQrejQ
+8ElkRdgjq4x6GMXD/KYDyMl0gjU9+UXyfO0zow+IbZdaRfW11H09x1gkYH9dqetZ
+wlroWFHYjt1F6JSGy2/Q95wudEBVLnFoHPbOLGMM4VuI+bvdK/exLG7WcHchO7QS
+tFJ1gaxT7WxvuH4o2DDJBZ3ujEqSTs5lt+G1K6JD4Mqn4P35H7Wh3wzTx8UPYGIG
+d7/9WcJL2c+BvAs+FOicpHzgSd/jRBO4XXCs88Rhaul0Cmea0pNy4JW5jfHl14j1
+NdsC9OH3P9F3Pej7mphFBFLFGNV1p6iTetJ0mqYXtgrsIoCjadmHCg35vPgNcGos
+YUdmTyc94e69lM/dRzV8YEXDk2ZCJwONlopesRu6oPD/Lv1yqWDCZyGMgQi1CaaM
+UUxctBnCHKEf7iKuY1eOgDvCR2ldC1hTIYgcrb+heuBQpLUVh107cwW0UfVbCLtA
+cHb6BgvcmK3p4d6cHn1H0ks6wiINt1nnPsQn+dH7GsKuobdqViWrovTCC4UBdVxl
+6izuezAPJ9B1hGP3mXn6WrV1bSFAuTUEw5/gZx6VDmZ1XgPRmYZJzVaP+Ty7tAVv
+E9uwfRL1J0e8nmw9ThdSI9lz92sSbRGOaBwCiwOeIap10d9WK6tgzmwa1DezRv6F
++wrDfvzfZEec8LgDcAF9cnr7PWm4Gzli/G1y3jgceBoTTJshFIme1DnNhHwAp6Lu
+3W/5+Fz0mh2oRRlj62MZvbr/f6p/9DVnoWs6fGk3Nv/2leaN9J+1r8NYdcOcdWdr
+joEoKjrwI+JVuDL3P+Qr2K5ohcRaRUULySFz7ZwhYBAPWne5qYiJCBYhvQmRXRD+
+dmXxjV70iiY7+qrlQz5zjJjPLDC/e+1aHstbnX2OqfRlzjz04X9dvwJ+CtpXMZWo
+CbbxGO4Kp2htu6SfxsKe2Wg1xr+6C2cPKDnIzyzWQCyh2/Yp98LGFlz3N0QpTsqD
+xG4vewgEap5nf640YW7+Xcz4V3oq7WS6ytXME+aX55JW/aPi1/r4q4spNsqXnPjm
+/P66AnsC5gN61b18MnhUIQJ0JVsIvCbICJ6zyXZSx7tvipFj2gUhV4M688s/j/JH
+FBKjEYGJSjghWT1Xuoiat8foOahP1nxxItEDEO/IfSKAifj2GYRzLMnPyXJz57Fi
+9iwLYXDnjPAGMCsHUTH/Okb66cuBmZdpC6QsTpuTQba9hHr4UvN9wNTnPYrfjGeH
+BeyIUWBcjIu2dtK5VeMoG6BFHEoBmwE+hJyMPu35nLm1gvlY89WlDlP4ubrQNBcw
+h1cFjxqRc1KIFvERoDjIget4qrRU6PH1hr19J+BoN96ctRRM9A4rZfLAV3E/myuJ
+ihPWtNTzFUsQIP0vgMpdCplS7X4OnxY+BjiPZ5L08HSn0/uElMOE3Uhbe7lPaTpT
+FOcT0bYXq2RTqJrMClnZDVKVOdJhZJpXQaimPFTOKPu5uXmBBeHkMMoAgMH9XCiT
+yoXDTP/woplUDHDNkokGTrxES5W1pGe9OlrK1aDOGHS+JHFyTzr8GQZcAuerbbnE
+lPcDbmC/NJW6rRJSKiLc7kNTTHoNTBuftUVTUkaefLdthqAgwQl+jqGdizixo+f+
+qbJGdsQkWEK4dvmPo4/mYrsZGNz+rHkcQ6ErjUgFQyBnrGWvv2/lrh2Z6eulpVpR
+fh0mbRnylor5PpU6i9LyPpqPed3W+U/9KkROcxlVg4hoyVrYd4n1h+Y4mzYGzP6L
+lFxk8KNG37iX3/CK4yXRNHDuvpbDQkODK7L9RPOrWA3CN3Z8BLYy1VyWv5NvrEdq
+GklUkzKKBCkHNQXS2WnQr4E7TigvEB0RcuCpYOK9A9THxtaVEuTtjGQWYTJrcaUZ
+yR19M0e3ZgJ2i0cACjKEfIr2AOwZI70CVvF7v6jtSNA+21FFL6JFiDzsMdKxseJg
+rF0IMnHvFchDsAohzgQqgL8mC7RTspSeBtGxL6+vJ2mv05FPS4PLPQUZgAfzkRA7
+rKrmruGa3iFymdZKg95WWCzl+NfFqxBPBp3lA98nRK7UALHs3xaBcKVZ2soGsw8Z
++Wu6qcqjcWSurvP8hqjdnCh+1b1vR6IOvshMTk9LXQfgNCAZkZ3/U1vMK6oDd1+n
+/ZWo6YFQJg6tRwGn+aiIrzjZKFZlRTg7DAEdOrNXRs6E2uEJD0K6F0o8bBARtS/h
+XId4AREDOwhXndqdK4MegFd6vnmSeJU4dsGGiwlMtXiFfa0x3pg0i39e5aNoYj3M
+O4dsvIEJx9cDvPWENcxQVX52fI8XsLwX4VegV+N6nwUqcka6+V7sw9SO2S3IIZKq
+2Qp3BxevvxMeCxkpSZ9jWLiM2q3rda2lxseoUDp7oDsv7axmNEN8rLCu87CHGJqf
+PvWjQt6CWol2/TQ8KOtDC0Eg0x/cs0TDZ7iY8P3gzI5xXGsp+wYFuibgyrxEykE1
+mWaFdp/Dcj+4ZQQVodXFgz2TmSCN/rF4JJdmM4Rx3sG2/HD6UgfcRPuPASYjIPDu
+f3LP45XwvXVmYnTmXYZPmlZRv5D51xIVdenS3CNSKCUy4C7BdJDzN07G7QngcX3n
+hX4c2fhH+ViVczFAQ5HcAwGmyzfs7tdj/Qod1uUGtqXZajtVtD6EbJXjEqQK5rhT
+s1SwRr+wxHjFfUQeq03ddpp1gHS3dWjOVTX0wLK0xBo+A7zG7JMG6cnVI7cQOu/u
+4by0VrgaM4owb5aUutS/TVtabutqUNylEgGU+Q5ITO7DwcJZRugPb+XO7VFJVsoq
+NV08DczL5xA3V0y+778h8dqePA00uXCSg4LWY4O1Gb3GSKA6/KQFX21LulZJ03cm
+iQXsnTWozyjqkF6+wx03HU14LlJBR4VfQfbMqE3u3wg29XyyBeR786blObElCKgv
+Gl7SzlaHF/OXlZJshIh6kshCsiFtu0qWEcyZrtCOro18mEnogcgqOCZIISwvVNnG
+qfcaZ3JH2dmlOxe51jKTI2yugZUlrkWR73wd9Eg+qz3c7rMS+cR42Jp3ksPUpDuI
+60FjoeIcGht1YcuQShUvNX/x3RWTdflhY85GJMEPSUSoJfxQY0+okRRsoS5uk23q
+nrYJdx12RJ1kCkBRu5U7024pgnfExMm2odajAHqoURvVRY2A/eFHytfU1QrEWKZX
+1nqLl4vO9nphYHX6Udm22hQCkm0DNh6M5dDCyeoLuyRr450ZDco3vowV/5JYZq6v
+Tg3ykuK+HGN4voMQ5Ll+PlMVtgCGbkLwoCW/jk+Pbz/5HRai/kY6vDc2A5vbeJbi
+CcZiDxr9nTnkKGp9oLk30LKrp7pPLpj3/yrudXjVk+5+KUOE5b8YLOgu/uC2XNTV
+9ahq73QNdD0AHgI2wVK300iyUoOgQlxqlJpAR7cNqon5p68EM/ebrvRKINZS4s1A
+qkqT3678YZ21lLliNB/ZcD6D5NEsOJ+Xql2Iax0EClxcc+J+WNZRCNq5icTARzZC
+BpADVbG/pTGuK1E0U+cDNix/4vzG+fj5GymGSkmi1eQtpEvmV8k43Smy5OWxWZZQ
+O+C6YShiLRXCPrrs3QfOcenqfPz9NWppnqPlfZ/WEu5+UCFhVzxNdE6Rh+UfpI5m
+reOuv+gtMWWHzWkh5VpT2k8UVOgWywvzX5ce+FptSFHlVNsksrgn31/EL4GNLmd8
+jaxsTB70v2e+/6rc7BlAN83AKT6kB6b5LwjFu06xgUn0VOorwWAn6Qui33wBEGYP
