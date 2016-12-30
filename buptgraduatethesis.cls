@@ -972,15 +972,28 @@
   \gdef\@chapapp{\appendixname}%
 }{}
 \setlength{\glsdescwidth}{0.9\linewidth} % 缩略语描述列宽
+%\newglossarystyle{bupt@acronyms@style}{  % 设置自定义缩略语表格式
+%  \glossarystyle{long}                   % 以 long 样式为基础
+%  \renewcommand*{\glossaryentryfield}[5]{%
+%   \ifnum\bupt@driver=3
+%   \@glstarget{glo:##1}{##2} & ##3\char"FF0C ##4\\%
+%   \else
+%    \@glstarget{glo:##1}{##2} & ##3\CJKchar{"0FF}{"00C}##4\\
+%    \fi}%
+%}
+
+%modify by lk
 \newglossarystyle{bupt@acronyms@style}{  % 设置自定义缩略语表格式
   \glossarystyle{long}                   % 以 long 样式为基础
+  \renewcommand{\glsgroupskip}{}%
   \renewcommand*{\glossaryentryfield}[5]{%
    \ifnum\bupt@driver=3
-   \@glstarget{glo:##1}{##2} & ##3\char"FF0C ##4\\%
+   \@glstarget{glo:##1}{##2} & ##3\char"FF0C ##4\\[15pt]%
    \else
-    \@glstarget{glo:##1}{##2} & ##3\CJKchar{"0FF}{"00C}##4\\
+    \@glstarget{glo:##1}{##2} & ##3\CJKchar{"0FF}{"00C}##4\\[15pt]
     \fi}%
 }
+
 \glossarystyle{bupt@acronyms@style} % 选择自定义的缩略语表样式
 \newglossary[alg]{acronym}{acr}{acn}{\bupt@label@listofacronyms}
 \makeglossaries
